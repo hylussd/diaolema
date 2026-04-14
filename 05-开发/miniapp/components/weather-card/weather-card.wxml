@@ -1,0 +1,37 @@
+<!-- 天气卡片：悬浮在地图底部 -->
+<view class="weather-card" wx:if="{{!loading && weather}}">
+  <view class="weather-main">
+    <view class="temp-wrap">
+      <text class="temp">{{weather.temp}}°</text>
+      <text class="condition">{{weather.condition}}</text>
+    </view>
+    <view class="weather-details">
+      <view class="detail-item">
+        <text class="label">气压</text>
+        <text class="value">{{weather.pressure}} hPa</text>
+      </view>
+      <view class="detail-item">
+        <text class="label">风力</text>
+        <text class="value">{{weather.windSpeed}} {{weather.windScale}}级</text>
+      </view>
+      <view class="detail-item">
+        <text class="label">湿度</text>
+        <text class="value">{{weather.humidity}}%</text>
+      </view>
+    </view>
+  </view>
+  <view class="weather-footer" bindtap="goToWeatherDetail">
+    <text class="tip">{{weather.tip || '查看7天天气'}}</text>
+    <text class="arrow">›</text>
+  </view>
+</view>
+
+<!-- 加载态 -->
+<view class="weather-card loading-card" wx:if="{{loading}}">
+  <text class="loading-text">正在加载天气...</text>
+</view>
+
+<!-- 无数据 -->
+<view class="weather-card empty-card" wx:if="{{!loading && !weather}}">
+  <text class="loading-text">暂无天气数据</text>
+</view>

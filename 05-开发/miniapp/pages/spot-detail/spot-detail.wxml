@@ -1,0 +1,72 @@
+<!-- 标点详情页 -->
+<view class="page" wx:if="{{!loading && spot}}">
+  <!-- 地图预览 -->
+  <map
+    class="mini-map"
+    latitude="{{spot.latitude}}"
+    longitude="{{spot.longitude}}"
+    scale="15"
+    markers="{{[{id: 1, latitude: spot.latitude, longitude: spot.longitude, iconPath: '/assets/icons/marker.png', width: 36, height: 44}]}}"
+    polygons="[]"
+    bindtap="goToMap"
+  />
+  <view class="map-tip">点击地图导航</view>
+
+  <!-- 基础信息 -->
+  <view class="section">
+    <view class="spot-name-row">
+      <text class="spot-name">{{spot.name}}</text>
+      <text class="spot-date text-secondary text-sm">{{spot.createdAt}}</text>
+    </view>
+
+    <view class="info-row">
+      <text class="label">位置</text>
+      <text class="value text-secondary" bindtap="goToMap">
+        {{spot.latitude.toFixed(6)}}, {{spot.longitude.toFixed(6)}} 📍
+      </text>
+    </view>
+
+    <view class="info-row" wx:if="{{spot.terrainLabel}}">
+      <text class="label">地形</text>
+      <view class="tag">{{spot.terrainLabel}}</view>
+    </view>
+
+    <view class="info-row" wx:if="{{spot.fishSpecies && spot.fishSpecies.length > 0}}">
+      <text class="label">鱼种</text>
+      <view class="tags-wrap">
+        <view class="tag tag-fish" wx:for="{{spot.fishSpecies}}" wx:key="*this">{{item}}</view>
+      </view>
+    </view>
+
+    <view class="info-row" wx:if="{{spot.note}}">
+      <text class="label">备注</text>
+      <text class="value">{{spot.note}}</text>
+    </view>
+  </view>
+
+  <!-- 关联天气 -->
+  <view class="section" wx:if="{{weather || weatherLoading}}">
+    <view class="section-title">关联天气</view>
+    <view class="weather-summary" wx:if="{{weather}}">
+      <view class="w-row">
+        <text class="w-temp">{{weather.temp}}°</text>
+        <text class="w-condition">{{weather.condition}}</text>
+      </view>
+      <view class="w-details">
+        <text>气压 {{weather.pressure}}hPa</text>
+        <text>风力 {{weather.windScale}}级</text>
+        <text>湿度 {{weather.humidity}}%</text>
+      </view>
+    </view>
+    <view class="loading-wrap" wx:if="{{weatherLoading}}">
+      <text class="text-secondary">加载中...</text>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="actions">
+    <button class="btn btn-outline" bindtap="goToEdit">编辑</button>
+    <button class="btn btn-outline" open-type="share">分享</button>
+    <button class="btn btn-danger" bindtap="deleteSpot">删除</button>
+  </view>
+</view>

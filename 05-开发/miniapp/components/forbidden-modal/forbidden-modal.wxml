@@ -1,0 +1,17 @@
+<!-- 禁钓区警告弹窗 -->
+<view class="modal-overlay" wx:if="{{visible}}" bindtap="onClose">
+  <view class="modal-content" catchtap="noop">
+    <view class="modal-icon">⚠️</view>
+    <view class="modal-title">已进入禁钓区域</view>
+    <view class="modal-body" wx:if="{{zone}}">
+      <text class="zone-name">{{zone.name || '此处为禁钓区'}}</text>
+      <text class="zone-desc">{{zone.description || '请遵守相关规定，切勿在此处钓鱼'}}</text>
+    </view>
+    <view class="modal-body" wx:if="{{!zone}}">
+      <text>当前位置可能处于禁钓区域，请确认当地法规后再行动。</text>
+    </view>
+    <view class="modal-footer">
+      <button class="btn-confirm" bindtap="onConfirm">知道了</button>
+    </view>
+  </view>
+</view>

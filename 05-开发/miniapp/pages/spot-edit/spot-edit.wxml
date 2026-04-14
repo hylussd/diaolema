@@ -1,0 +1,95 @@
+<!-- 标点新建/编辑页 -->
+<view class="page">
+  <!-- 名称 -->
+  <view class="form-section">
+    <view class="form-label">标点名称 *</view>
+    <input
+      class="input"
+      placeholder="例如：东湖鱼塘"
+      value="{{name}}"
+      bindinput="onNameInput"
+      maxlength="50"
+    />
+  </view>
+
+  <!-- 位置 -->
+  <view class="form-section">
+    <view class="form-label">坐标位置 *</view>
+    <view class="location-row">
+      <input
+        class="input flex-1"
+        placeholder="纬度"
+        value="{{latitude}}"
+        disabled
+      />
+      <input
+        class="input flex-1"
+        placeholder="经度"
+        value="{{longitude}}"
+        disabled
+      />
+      <view class="btn btn-outline loc-btn" bindtap="chooseLocation">选位置</view>
+    </view>
+  </view>
+
+  <!-- 分类 -->
+  <view class="form-section">
+    <view class="form-label">分类</view>
+    <category-picker
+      categories="{{categories}}"
+      value="{{categoryId}}"
+      bindchange="onCategoryChange"
+    />
+  </view>
+
+  <!-- 地形 -->
+  <view class="form-section">
+    <view class="form-label">地形</view>
+    <view class="terrain-picker">
+      <picker
+        mode="selector"
+        range="{{terrainOptions}}"
+        range-key="label"
+        bindchange="onTerrainChange"
+        value="{{terrainIndex}}"
+      >
+        <view class="picker-value">{{terrainLabel}}</view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 鱼种 -->
+  <view class="form-section">
+    <view class="form-label">鱼种</view>
+    <view class="fish-grid">
+      <view
+        class="fish-chip {{selectedFish.indexOf(item) >= 0 ? 'active' : ''}}"
+        wx:for="{{fishOptions}}"
+        wx:key="*this"
+        data-species="{{item}}"
+        bindtap="onFishToggle"
+      >{{item}}</view>
+    </view>
+  </view>
+
+  <!-- 备注 -->
+  <view class="form-section">
+    <view class="form-label">备注</view>
+    <textarea
+      class="textarea"
+      placeholder="水深、路况、收费情况等..."
+      value="{{note}}"
+      bindinput="onNoteInput"
+      maxlength="500"
+    />
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-bar">
+    <button
+      class="btn btn-primary submit-btn"
+      bindtap="submit"
+      loading="{{submitting}}"
+    >{{isEdit ? '保存修改' : '创建标点'}}</button>
+  </view>
+</view>

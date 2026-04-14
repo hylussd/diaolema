@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "spot-card": "../../components/spot-card/spot-card",
+    "category-picker": "../../components/category-picker/category-picker",
+    "loading": "../../components/loading/loading"
+  }
+}

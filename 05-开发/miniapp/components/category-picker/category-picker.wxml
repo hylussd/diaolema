@@ -1,0 +1,11 @@
+<view class="category-picker">
+  <view
+    class="cat-item {{value === item.id ? 'active' : ''}}"
+    wx:for="{{categories}}"
+    wx:key="id"
+    data-id="{{item.id}}"
+    bindtap="onSelect"
+  >
+    {{item.name}}
+  </view>
+</view>

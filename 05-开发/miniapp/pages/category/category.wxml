@@ -1,0 +1,50 @@
+<!-- 分类管理页 -->
+<view class="page">
+  <view class="header-bar">
+    <text class="page-title">分类管理</text>
+    <view class="btn btn-primary btn-sm" bindtap="showAdd">+ 新建</view>
+  </view>
+
+  <!-- 列表 -->
+  <view class="cat-list" wx:if="{{!loading && categories.length > 0}}">
+    <view class="cat-item" wx:for="{{categories}}" wx:key="id">
+      <view class="cat-icon">📁</view>
+      <view class="cat-info">
+        <text class="cat-name">{{item.name}}</text>
+        <text class="cat-count text-secondary text-sm" wx:if="{{item.count !== undefined}}">{{item.count}}个标点</text>
+      </view>
+      <view class="cat-actions">
+        <text class="action-btn" bindtap="showEdit" data-cat="{{item}}">编辑</text>
+        <text class="action-btn danger" bindtap="deleteCat" data-id="{{item.id}}">删除</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!loading && categories.length === 0}}">
+    <text class="icon">📁</text>
+    <text>暂无分类</text>
+    <button class="btn btn-primary mt-24" bindtap="showAdd">新建分类</button>
+  </view>
+
+  <loading wx:if="{{loading}}" />
+
+  <!-- 新建/编辑弹窗 -->
+  <view class="modal-overlay" wx:if="{{showAddModal}}" bindtap="closeModal">
+    <view class="modal-content" catchtap="">
+      <view class="modal-title">{{editCategory ? '编辑分类' : '新建分类'}}</view>
+      <input
+        class="input"
+        placeholder="分类名称"
+        value="{{newName}}"
+        bindinput="onNameInput"
+        maxlength="20"
+        focus
+      />
+      <view class="modal-actions">
+        <button class="btn btn-outline" bindtap="closeModal">取消</button>
+        <button class="btn btn-primary" bindtap="save">保存</button>
+      </view>
+    </view>
+  </view>
+</view>

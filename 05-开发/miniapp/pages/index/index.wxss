@@ -1,0 +1,134 @@
+.page {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+}
+
+/* 顶部工具栏 */
+.top-bar {
+  position: absolute;
+  top: calc(env(safe-area-inset-top) + 16rpx);
+  right: 24rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  z-index: 10;
+}
+
+.map-toggle,
+.loc-btn {
+  width: 80rpx;
+  height: 80rpx;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(8px);
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  font-weight: 500;
+  color: #1f2937;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* 底部区域 */
+.bottom-area {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+/* 悬浮标点按钮 */
+.fab {
+  position: absolute;
+  bottom: 220rpx;
+  right: 24rpx;
+  width: 96rpx;
+  height: 96rpx;
+  background: #3b82f6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 56rpx;
+  color: #fff;
+  font-weight: 300;
+  box-shadow: 0 4px 16px rgba(59,130,246,0.4);
+  z-index: 10;
+}
+
+/* 选中标点面板 */
+.spot-panel {
+  position: absolute;
+  bottom: -300rpx;
+  left: 20rpx;
+  right: 20rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 28rpx;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.12);
+  z-index: 20;
+  transition: bottom 0.3s ease;
+}
+
+.spot-panel.show {
+  bottom: 200rpx;
+}
+
+.spot-panel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.spot-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.spot-panel-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.spot-panel-dist {
+  font-size: 26rpx;
+  color: #6b7280;
+}
+
+.spot-panel-tags {
+  display: flex;
+  gap: 10rpx;
+  flex-wrap: wrap;
+}
+
+.spot-panel-note {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spot-panel-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.detail-link {
+  font-size: 26rpx;
+  color: #3b82f6;
+}
+
+.tag-fish {
+  background: #f0fdf4;
+  color: #16a34a;
+}

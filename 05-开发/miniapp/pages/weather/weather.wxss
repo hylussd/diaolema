@@ -1,0 +1,136 @@
+.page {
+  min-height: 100vh;
+  background: #1a1a2e;
+  color: #fff;
+  padding-bottom: 40rpx;
+}
+
+.current-section {
+  padding: 48rpx 32rpx 32rpx;
+}
+
+.current-main {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  margin-bottom: 40rpx;
+}
+
+.big-temp {
+  font-size: 120rpx;
+  font-weight: 200;
+  line-height: 1;
+}
+
+.current-right {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.condition {
+  font-size: 32rpx;
+  color: rgba(255,255,255,0.9);
+}
+
+.location {
+  color: rgba(255,255,255,0.5);
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx;
+  margin-bottom: 32rpx;
+}
+
+.detail-item {
+  background: rgba(255,255,255,0.08);
+  border-radius: 16rpx;
+  padding: 24rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.d-icon { font-size: 32rpx; }
+.d-label { font-size: 24rpx; color: rgba(255,255,255,0.5); }
+.d-value { font-size: 28rpx; color: rgba(255,255,255,0.9); }
+
+.fishing-tip {
+  background: rgba(255,255,255,0.06);
+  border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.tip-label {
+  font-size: 26rpx;
+  color: #f59e0b;
+}
+
+.tip-text {
+  font-size: 26rpx;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.6;
+}
+
+.forecast-section {
+  padding: 0 20rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 16rpx;
+  padding-left: 12rpx;
+}
+
+.forecast-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rpx;
+  background: rgba(255,255,255,0.06);
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.forecast-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 24rpx;
+  gap: 16rpx;
+}
+
+.forecast-item + .forecast-item {
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.f-day {
+  width: 60rpx;
+  font-size: 26rpx;
+  color: rgba(255,255,255,0.7);
+}
+
+.f-text {
+  flex: 1;
+  font-size: 26rpx;
+  color: rgba(255,255,255,0.9);
+}
+
+.f-temp {
+  font-size: 26rpx;
+  color: rgba(255,255,255,0.9);
+  min-width: 140rpx;
+  text-align: right;
+}
+
+.f-wind {
+  font-size: 24rpx;
+  color: rgba(255,255,255,0.5);
+  min-width: 140rpx;
+  text-align: right;
+}

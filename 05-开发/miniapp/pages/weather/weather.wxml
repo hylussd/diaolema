@@ -1,0 +1,54 @@
+<!-- 天气详情页 -->
+<view class="page" wx:if="{{!loading && current}}">
+  <!-- 当前天气 -->
+  <view class="current-section">
+    <view class="current-main">
+      <text class="big-temp">{{current.temp}}°</text>
+      <view class="current-right">
+        <text class="condition">{{current.condition}}</text>
+        <text class="location text-secondary text-sm">钓鱼指数 {{current.fishingIndex || '未知'}}</text>
+      </view>
+    </view>
+
+    <view class="detail-grid">
+      <view class="detail-item">
+        <text class="d-icon">💨</text>
+        <text class="d-label">气压</text>
+        <text class="d-value">{{current.pressure}} hPa</text>
+      </view>
+      <view class="detail-item">
+        <text class="d-icon">🌬️</text>
+        <text class="d-label">风力</text>
+        <text class="d-value">{{current.windSpeed}} {{current.windScale}}级</text>
+      </view>
+      <view class="detail-item">
+        <text class="d-icon">💧</text>
+        <text class="d-label">湿度</text>
+        <text class="d-value">{{current.humidity}}%</text>
+      </view>
+      <view class="detail-item">
+        <text class="d-icon">🌧️</text>
+        <text class="d-label">降水</text>
+        <text class="d-value">{{current.precip}}mm</text>
+      </view>
+    </view>
+
+    <view class="fishing-tip" wx:if="{{current.fishingTip}}">
+      <text class="tip-label">💡 钓鱼建议</text>
+      <text class="tip-text">{{current.fishingTip}}</text>
+    </view>
+  </view>
+
+  <!-- 7天预报 -->
+  <view class="forecast-section">
+    <view class="section-title">7天预报</view>
+    <view class="forecast-list">
+      <view class="forecast-item" wx:for="{{forecast}}" wx:key="date">
+        <text class="f-day">{{item.date}}</text>
+        <text class="f-text">{{item.textDay}}</text>
+        <text class="f-temp">{{item.tempMin}}° ~ {{item.tempMax}}°</text>
+        <text class="f-wind">{{item.windDir}} {{item.windScale}}级</text>
+      </view>
+    </view>
+  </view>
+</view>

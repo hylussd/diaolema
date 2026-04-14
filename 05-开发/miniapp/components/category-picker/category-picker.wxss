@@ -1,0 +1,21 @@
+.category-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.cat-item {
+  padding: 10rpx 24rpx;
+  border-radius: 20rpx;
+  border: 2rpx solid #e5e7eb;
+  font-size: 26rpx;
+  color: #6b7280;
+  background: #fff;
+  transition: all 0.2s;
+}
+
+.cat-item.active {
+  border-color: #3b82f6;
+  color: #3b82f6;
+  background: #eff6ff;
+}

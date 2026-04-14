@@ -1,0 +1,70 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  width: 600rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 48rpx 40rpx 40rpx;
+  text-align: center;
+}
+
+.modal-icon {
+  font-size: 80rpx;
+  margin-bottom: 16rpx;
+}
+
+.modal-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #ef4444;
+  margin-bottom: 20rpx;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  margin-bottom: 32rpx;
+}
+
+.zone-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.zone-desc {
+  font-size: 26rpx;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-confirm {
+  width: 100%;
+  height: 88rpx;
+  background: #ef4444;
+  color: #fff;
+  border-radius: 16rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

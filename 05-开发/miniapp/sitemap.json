@@ -1,0 +1,10 @@
+{
+  "desc": "关于本小程序",
+  "setting": {
+    "isH5URL": false
+  },
+  "rules": [{
+    "action": "allow",
+    "page": "*"
+  }]
+}

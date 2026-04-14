@@ -1,0 +1,72 @@
+<!-- 地图首页 -->
+<view class="page">
+  <!-- 地图 -->
+  <map
+    id="mainMap"
+    class="map"
+    latitude="{{latitude}}"
+    longitude="{{longitude}}"
+    scale="{{scale}}"
+    map-type="{{mapType}}"
+    markers="{{satellites}}"
+    polygons="{{showForbidden ? polygons : []}}"
+    show-location
+    bindtap="onMapTap"
+    bindmarkertap="onMarkerTap"
+  >
+  </map>
+
+  <!-- 顶部工具栏 -->
+  <view class="top-bar">
+    <view class="map-toggle" bindtap="switchMapType">
+      <text>{{mapType === 'map' ? '卫星' : '路网'}}</text>
+    </view>
+    <view class="loc-btn" bindtap="relocate">
+      <text>📍</text>
+    </view>
+  </view>
+
+  <!-- 加号按钮：新建标点 -->
+  <view class="fab" bindtap="goToCreate">
+    <text>+</text>
+  </view>
+
+  <!-- 底部天气卡片 -->
+  <view class="bottom-area">
+    <weather-card
+      weather="{{weather}}"
+      loading="{{weatherLoading}}"
+      bindtap="goToWeather"
+    />
+  </view>
+
+  <!-- 选中标点悬浮面板 -->
+  <view class="spot-panel {{showSpotPanel ? 'show' : ''}}" wx:if="{{selectedSpot}}">
+    <view class="spot-panel-content" catchtap="goToDetail">
+      <view class="spot-panel-header">
+        <text class="spot-panel-name">{{selectedSpot.name}}</text>
+        <text class="spot-panel-dist">{{selectedSpot.distance}}</text>
+      </view>
+      <view class="spot-panel-tags">
+        <view class="tag" wx:if="{{selectedSpot.terrainLabel}}">{{selectedSpot.terrainLabel}}</view>
+        <view class="tag tag-fish" wx:if="{{selectedSpot.fishSpecies && selectedSpot.fishSpecies.length > 0}}">
+          {{selectedSpot.fishSpecies[0]}}
+          <text wx:if="{{selectedSpot.fishSpecies.length > 1}}">等{{selectedSpot.fishSpecies.length}}种</text>
+        </view>
+      </view>
+      <view class="spot-panel-note text-secondary text-sm" wx:if="{{selectedSpot.note}}">
+        {{selectedSpot.note}}
+      </view>
+      <view class="spot-panel-footer">
+        <text class="detail-link">查看详情 ›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 禁钓区警告弹窗 -->
+  <forbidden-modal
+    visible="{{showForbiddenModal}}"
+    zone="{{forbiddenZone}}"
+    bindtap="onForbiddenClose"
+  />
+</view>

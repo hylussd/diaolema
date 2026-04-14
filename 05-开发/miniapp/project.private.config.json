@@ -1,0 +1,6 @@
+{
+  "description": "本地私有配置（不上传）",
+  "setting": {
+    "localAddress": "http://127.0.0.1:8080"
+  }
+}

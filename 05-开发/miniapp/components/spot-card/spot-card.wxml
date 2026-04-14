@@ -1,0 +1,15 @@
+<!-- 标点卡片 -->
+<view class="spot-card" bindtap="onTap">
+  <view class="spot-header">
+    <view class="spot-name">{{spot.name}}</view>
+    <view class="spot-distance" wx:if="{{spot.distance}}">{{spot.distance}}</view>
+  </view>
+  <view class="spot-meta">
+    <view class="tag" wx:if="{{spot.terrain}}">{{spot.terrainLabel}}</view>
+    <view class="tag tag-fish" wx:if="{{spot.fishSpecies && spot.fishSpecies.length > 0}}">
+      {{spot.fishSpecies[0]}}
+      <text wx:if="{{spot.fishSpecies.length > 1}}">等{{spot.fishSpecies.length}}种</text>
+    </view>
+  </view>
+  <view class="spot-desc text-secondary text-sm" wx:if="{{spot.note}}">{{spot.note}}</view>
+</view>

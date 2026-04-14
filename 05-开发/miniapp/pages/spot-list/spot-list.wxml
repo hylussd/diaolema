@@ -1,0 +1,52 @@
+<!-- 标点列表页 -->
+<view class="page">
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <input
+      class="search-input"
+      placeholder="搜索标点名称"
+      value="{{keyword}}"
+      bindinput="onKeywordInput"
+    />
+  </view>
+
+  <!-- 分类筛选 -->
+  <view class="category-bar">
+    <view
+      class="cat-chip {{currentCategoryId === '' ? 'active' : ''}}"
+      bindtap="onCategoryChange"
+      data-id=""
+    >全部</view>
+    <category-picker
+      categories="{{categories}}"
+      value="{{currentCategoryId}}"
+      bindchange="onCategoryChange"
+    />
+  </view>
+
+  <!-- 列表 -->
+  <scroll-view scroll-y class="spot-list" wx:if="{{!loading && filteredSpots.length > 0}}">
+    <spot-card
+      wx:for="{{filteredSpots}}"
+      wx:key="id"
+      spot="{{item}}"
+      bindtap="goToDetail"
+      data-id="{{item.id}}"
+    />
+  </scroll-view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!loading && filteredSpots.length === 0}}">
+    <text class="icon">📍</text>
+    <text>暂无标点</text>
+    <button class="btn btn-primary mt-24" bindtap="goToCreate">新建标点</button>
+  </view>
+
+  <!-- 加载 -->
+  <loading wx:if="{{loading}}" />
+
+  <!-- 新建按钮 -->
+  <view class="fab" bindtap="goToCreate">
+    <text>+</text>
+  </view>
+</view>
