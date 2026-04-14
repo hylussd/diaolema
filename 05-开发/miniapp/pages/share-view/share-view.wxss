@@ -1,0 +1,216 @@
+.page {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding-bottom: 40rpx;
+}
+
+/* 状态页 */
+.state-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 160rpx 40rpx;
+  gap: 16rpx;
+}
+
+.loading-icon {
+  font-size: 80rpx;
+}
+
+.expired-icon {
+  font-size: 100rpx;
+}
+
+.state-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.state-text {
+  font-size: 28rpx;
+  color: #6b7280;
+  text-align: center;
+}
+
+.state-sub {
+  font-size: 24rpx;
+  color: #9ca3af;
+  text-align: center;
+}
+
+.btn-go-home {
+  margin-top: 32rpx;
+  padding: 0 48rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  background: #3b82f6;
+  color: #fff;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  border: none;
+}
+
+/* 地图 */
+.mini-map {
+  width: 100%;
+  height: 360rpx;
+}
+
+.map-tip {
+  text-align: center;
+  font-size: 24rpx;
+  color: #3b82f6;
+  padding: 8rpx;
+  background: #eff6ff;
+}
+
+/* 标点信息 */
+.spot-section {
+  margin-top: 16rpx;
+}
+
+.spot-name-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.spot-name {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #1f2937;
+  flex: 1;
+}
+
+.remaining-chip {
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 22rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 40rpx;
+}
+
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  padding: 12rpx 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-size: 26rpx;
+  color: #6b7280;
+  flex-shrink: 0;
+  width: 80rpx;
+}
+
+.info-value {
+  font-size: 26rpx;
+  color: #1f2937;
+  flex: 1;
+}
+
+.coord-text {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  flex-wrap: wrap;
+}
+
+.copy-btn {
+  font-size: 22rpx;
+  color: #3b82f6;
+  background: #eff6ff;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+}
+
+.tags-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
+
+.tag-fish {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+/* 天气 */
+.section {
+  background: #fff;
+  margin: 16rpx 20rpx;
+  border-radius: 16rpx;
+  padding: 24rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 16rpx;
+}
+
+.weather-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.w-temp {
+  font-size: 52rpx;
+  font-weight: 300;
+  color: #1f2937;
+}
+
+.w-condition {
+  font-size: 26rpx;
+  color: #6b7280;
+}
+
+.w-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+  font-size: 24rpx;
+  color: #6b7280;
+  text-align: right;
+}
+
+/* 操作按钮 */
+.action-row {
+  display: flex;
+  gap: 16rpx;
+  padding: 24rpx 20rpx;
+}
+
+.btn-nav,
+.btn-detail {
+  flex: 1;
+  height: 88rpx;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+
+.btn-nav {
+  background: #3b82f6;
+  color: #fff;
+}
+
+.btn-detail {
+  background: #fff;
+  color: #3b82f6;
+  border: 1px solid #3b82f6;
+}

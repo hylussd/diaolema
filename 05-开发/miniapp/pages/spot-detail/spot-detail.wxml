@@ -1,4 +1,4 @@
-<!-- 标点详情页 -->
+<!-- 标点详情页 - P1改造：天气关联 + AI推荐理由 + 历史打卡 + 分享Token + 打卡入口 -->
 <view class="page" wx:if="{{!loading && spot}}">
   <!-- 地图预览 -->
   <map
@@ -31,10 +31,10 @@
       <view class="tag">{{spot.terrainLabel}}</view>
     </view>
 
-    <view class="info-row" wx:if="{{spot.fishSpecies && spot.fishSpecies.length > 0}}">
+    <view class="info-row" wx:if="{{spot.fish_species && spot.fish_species.length > 0}}">
       <text class="label">鱼种</text>
       <view class="tags-wrap">
-        <view class="tag tag-fish" wx:for="{{spot.fishSpecies}}" wx:key="*this">{{item}}</view>
+        <view class="tag tag-fish" wx:for="{{spot.fish_species}}" wx:key="*this">{{item}}</view>
       </view>
     </view>
 
@@ -63,10 +63,87 @@
     </view>
   </view>
 
-  <!-- 操作按钮 -->
+  <!-- P1: AI推荐理由 -->
+  <view class="section" wx:if="{{aiRecommendResult || aiRecommendLoading}}">
+    <view class="section-title">AI推荐理由</view>
+    <view class="ai-reason" wx:if="{{aiRecommendResult}}">
+      <view class="ai-score-row">
+        <text class="ai-score-label">综合评分</text>
+        <view class="ai-score-badge">
+          <text class="ai-score-num">{{aiRecommendResult.score}}</text>
+          <text class="ai-score-unit">分</text>
+        </view>
+      </view>
+      <view class="ai-reasons">
+        <text
+          wx:for="{{aiRecommendResult.reasons || []}}"
+          wx:key="*this"
+          class="reason-item"
+        >🎯 {{item}}</text>
+      </view>
+    </view>
+    <view class="loading-wrap" wx:if="{{aiRecommendLoading}}">
+      <text class="text-secondary">AI分析中...</text>
+    </view>
+  </view>
+
+  <!-- P1: 历史打卡记录 -->
+  <view class="section">
+    <view class="section-title-row">
+      <text class="section-title">打卡记录</text>
+      <view class="checkin-btn" bindtap="goToCheckin">📝 记录今日</view>
+    </view>
+    <view class="loading-wrap" wx:if="{{checkinsLoading}}">
+      <text class="text-secondary">加载中...</text>
+    </view>
+    <view class="empty-checkins" wx:if="{{!checkinsLoading && checkins.length === 0}}">
+      <text class="text-secondary text-sm">暂无打卡记录</text>
+    </view>
+    <view class="checkin-list" wx:if="{{checkins.length > 0}}">
+      <view
+        wx:for="{{checkins}}"
+        wx:key="id"
+        class="checkin-item"
+      >
+        <view class="checkin-header">
+          <text class="checkin-date">{{item.checkinDate}}</text>
+          <text class="checkin-fish text-primary">{{item.fishCaughtText}}</text>
+          <text class="checkin-weight text-secondary" wx:if="{{item.weight_kg}}">{{item.weight_kg}}kg</text>
+        </view>
+        <view class="checkin-meta" wx:if="{{item.weather_text}}">
+          <text class="text-sm text-secondary">{{item.weather_text}} {{item.temp ? item.temp + '°' : ''}} {{item.pressure ? item.pressure + 'hPa' : ''}}</text>
+        </view>
+        <view class="checkin-notes text-sm" wx:if="{{item.notes}}">{{item.notes}}</view>
+        <view class="checkin-del" bindtap="onDeleteCheckin" data-id="{{item.id}}">删除</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- P1: 分享按钮组 -->
   <view class="actions">
     <button class="btn btn-outline" bindtap="goToEdit">编辑</button>
-    <button class="btn btn-outline" open-type="share">分享</button>
+    <button class="btn btn-outline" bindtap="onCreateShareToken">生成分享链接</button>
     <button class="btn btn-danger" bindtap="deleteSpot">删除</button>
+  </view>
+</view>
+
+<!-- P1: 分享Token弹窗 -->
+<view class="token-modal-overlay" wx:if="{{showShareTokenModal}}" bindtap="closeShareTokenModal">
+  <view class="token-modal" catchtap="noop">
+    <view class="token-modal-header">
+      <text class="token-modal-title">分享链接</text>
+      <text class="token-modal-close" bindtap="closeShareTokenModal">✕</text>
+    </view>
+    <view class="token-modal-body">
+      <view class="share-url-box">
+        <text class="share-url-text" selectable="true">{{shareTokenUrl}}</text>
+      </view>
+      <view class="share-expire" wx:if="{{shareTokenExpires}}">
+        <text class="text-secondary text-sm">有效期至：{{shareTokenExpires}}</text>
+      </view>
+    </view>
+    <view class="token-modal-footer">
+      <button class="btn-copy" bindtap="onCopyShareUrl">复制链接</button>
+    </view>
   </view>
 </view>

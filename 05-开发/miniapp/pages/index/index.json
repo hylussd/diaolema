@@ -1,7 +1,8 @@
 {
   "usingComponents": {
     "weather-card": "../../components/weather-card/weather-card",
-    "forbidden-modal": "../../components/forbidden-modal/forbidden-modal"
+    "forbidden-modal": "../../components/forbidden-modal/forbidden-modal",
+    "filter-panel": "../../components/filter-panel/filter-panel"
   },
   "navigationStyle": "custom"
 }

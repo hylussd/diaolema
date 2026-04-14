@@ -1,4 +1,4 @@
-<!-- 地图首页 -->
+<!-- 地图首页 - P1改造：增加筛选入口按钮和筛选面板 -->
 <view class="page">
   <!-- 地图 -->
   <map
@@ -13,17 +13,29 @@
     show-location
     bindtap="onMapTap"
     bindmarkertap="onMarkerTap"
-  >
-  </map>
+  />
 
   <!-- 顶部工具栏 -->
   <view class="top-bar">
+    <!-- P1: 筛选按钮 -->
+    <view
+      class="filter-btn {{filterActive ? 'active' : ''}}"
+      bindtap="openFilter"
+    >
+      <text>筛选</text>
+      <text wx:if="{{filterActive}}" class="filter-dot">·</text>
+    </view>
     <view class="map-toggle" bindtap="switchMapType">
       <text>{{mapType === 'map' ? '卫星' : '路网'}}</text>
     </view>
     <view class="loc-btn" bindtap="relocate">
       <text>📍</text>
     </view>
+  </view>
+
+  <!-- P1: AI推荐悬浮按钮 -->
+  <view class="fab-recommend" bindtap="goToRecommend">
+    <text>🎣</text>
   </view>
 
   <!-- 加号按钮：新建标点 -->
@@ -47,21 +59,33 @@
         <text class="spot-panel-name">{{selectedSpot.name}}</text>
         <text class="spot-panel-dist">{{selectedSpot.distance}}</text>
       </view>
+      <!-- P1: 显示AI匹配分 -->
+      <view class="match-score" wx:if="{{selectedSpot.match_score}}">
+        <text class="score-label">匹配度</text>
+        <text class="score-val">{{selectedSpot.match_score}}分</text>
+        <text class="score-reasons text-secondary text-sm" wx:if="{{selectedSpot.match_reasons && selectedSpot.match_reasons.length > 0}}">
+          · {{selectedSpot.match_reasons[0]}}
+        </text>
+      </view>
       <view class="spot-panel-tags">
         <view class="tag" wx:if="{{selectedSpot.terrainLabel}}">{{selectedSpot.terrainLabel}}</view>
-        <view class="tag tag-fish" wx:if="{{selectedSpot.fishSpecies && selectedSpot.fishSpecies.length > 0}}">
-          {{selectedSpot.fishSpecies[0]}}
-          <text wx:if="{{selectedSpot.fishSpecies.length > 1}}">等{{selectedSpot.fishSpecies.length}}种</text>
+        <view class="tag tag-fish" wx:if="{{selectedSpot.fish_species && selectedSpot.fish_species.length > 0}}">
+          {{selectedSpot.fish_species[0]}}
+          <text wx:if="{{selectedSpot.fish_species.length > 1}}">等{{selectedSpot.fish_species.length}}种</text>
         </view>
-      </view>
-      <view class="spot-panel-note text-secondary text-sm" wx:if="{{selectedSpot.note}}">
-        {{selectedSpot.note}}
       </view>
       <view class="spot-panel-footer">
         <text class="detail-link">查看详情 ›</text>
       </view>
     </view>
   </view>
+
+  <!-- P1: 筛选面板 -->
+  <filter-panel
+    visible="{{showFilter}}"
+    bind:close="closeFilter"
+    bind:confirm="onFilterConfirm"
+  />
 
   <!-- 禁钓区警告弹窗 -->
   <forbidden-modal

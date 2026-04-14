@@ -1,0 +1,84 @@
+<!-- components/filter-panel/filter-panel.wxml -->
+<view class="filter-overlay {{visible ? 'show' : ''}}" wx:if="{{visible}}" bindtap="onClose">
+  <view class="filter-panel" catchtap="noop">
+    <!-- 头部 -->
+    <view class="panel-header">
+      <text class="panel-title">筛选钓点</text>
+      <text class="close-btn" catchtap="onClose" capture-catch:tap="onClose">✕</text>
+    </view>
+
+    <scroll-view scroll-y class="panel-body" catchtap="noop">
+      <!-- 气压区间 -->
+      <view class="filter-section">
+        <view class="section-label">
+          <text>气压范围</text>
+          <text class="range-value">{{pressureMin}} ~ {{pressureMax}} hPa</text>
+        </view>
+        <slider
+          range
+          min="980"
+          max="1040"
+          step="1"
+          value="{{[pressureMin, pressureMax]}}"
+          bindchange="onPressureChange"
+          activeColor="#3b82f6"
+        />
+      </view>
+
+      <!-- 水温区间 -->
+      <view class="filter-section">
+        <view class="section-label">
+          <text>水温范围</text>
+          <text class="range-value">{{tempMin}} ~ {{tempMax}} °C</text>
+        </view>
+        <slider
+          range
+          min="0"
+          max="40"
+          step="1"
+          value="{{[tempMin, tempMax]}}"
+          bindchange="onTempChange"
+          activeColor="#3b82f6"
+        />
+      </view>
+
+      <!-- 鱼种多选 -->
+      <view class="filter-section">
+        <view class="section-label">目标鱼种</view>
+        <view class="fish-grid">
+          <view
+            wx:for="{{fishSpecies}}"
+            wx:key="*this"
+            class="fish-chip {{selectedFish.indexOf(item) !== -1 ? 'active' : ''}}"
+            bindtap="onFishToggle"
+            data-fish="{{item}}"
+          >{{item}}</view>
+        </view>
+      </view>
+
+      <!-- 钓场类型 -->
+      <view class="filter-section">
+        <view class="section-label">钓场类型</view>
+        <picker
+          mode="selector"
+          range="{{terrainTypes}}"
+          range-key="label"
+          bindchange="onTerrainChange"
+          value="{{selectedTerrainIndex}}"
+        >
+          <view class="terrain-picker">
+            <text wx:for="{{terrainTypes}}" wx:key="value" wx:if="{{item.value === selectedTerrain}}">{{item.label}}</text>
+            <text wx:if="{{!selectedTerrain}}">全部类型</text>
+            <text class="arrow">›</text>
+          </view>
+        </picker>
+      </view>
+    </scroll-view>
+
+    <!-- 底部操作 -->
+    <view class="panel-footer">
+      <button class="btn btn-ghost" bindtap="onReset">重置</button>
+      <button class="btn btn-primary" bindtap="onConfirm">确认筛选</button>
+    </view>
+  </view>
+</view>

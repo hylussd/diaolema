@@ -1,8 +1,8 @@
 // pages/index/index.js
-// 地图首页
+// 地图首页 - P1改造：增加筛选入口
 const app = getApp();
 const constants = require('../../utils/constants');
-const { getSpots } = require('../../services/spots');
+const { getSpots, filterSpots } = require('../../services/spots');
 const { getCurrentWeather } = require('../../services/weather');
 const { getForbiddenZones } = require('../../services/forbidden');
 const { isInForbiddenZone } = require('../../utils/polygon');
@@ -13,18 +13,24 @@ Page({
     latitude: constants.MAP.DEFAULT_LAT,
     longitude: constants.MAP.DEFAULT_LNG,
     scale: constants.MAP.DEFAULT_SCALE,
-    mapType: 'map',          // 'map' | 'satellite'
-    satellites: [],          // 标点列表
-    polygons: [],            // 禁钓区多边形
-    controls: [],
-    showForbidden: false,    // 显示禁钓区
+    mapType: 'map',
+    satellites: [],
+    polygons: [],
+    showForbidden: false,
     forbiddenZone: null,
     weather: null,
     weatherLoading: true,
     userLocation: null,
-    showSpotPanel: false,   // 底部标点面板
+    showSpotPanel: false,
     selectedSpot: null,
     locationEnabled: false,
+    // P1: 筛选相关
+    showFilter: false,           // 筛选面板显示
+    filteredSpots: null,          // 筛选结果
+    filterActive: false,          // 是否有筛选条件
+    filterParams: {},            // 当前筛选参数
+    // P1: 推荐页入口
+    showRecommendBtn: false,
   },
 
   onLoad() {
@@ -33,12 +39,11 @@ Page({
   },
 
   onShow() {
-    // 每次进入刷新标点
     this.loadSpots();
     this.checkForbidden();
   },
 
-  // 初始化定位
+  // ---------- 定位 ----------
   initLocation() {
     wx.getLocation({
       type: 'gcj02',
@@ -63,7 +68,7 @@ Page({
     });
   },
 
-  // 加载天气
+  // ---------- 天气 ----------
   async loadWeather(lat, lng) {
     this.setData({ weatherLoading: true });
     try {
@@ -74,19 +79,18 @@ Page({
     }
   },
 
-  // 加载所有标点
-  async loadSpots() {
+  // ---------- 标点加载 ----------
+  async loadSpots(params) {
     try {
-      const res = await getSpots();
-      const spots = (res.items || res || []).map(spot => {
-        // 计算距离
+      const queryParams = params || {};
+      const res = await filterSpots(queryParams);
+      const spots = ((res.items || []) || []).map(spot => {
         const userLoc = this.data.userLocation;
         if (userLoc) {
           spot.distance = formatDistance(
             distance(userLoc.lat, userLoc.lng, spot.latitude, spot.longitude)
           );
         }
-        // 地形标签映射
         const terrainItem = constants.TERRAIN_TYPES.find(t => t.value === spot.terrain);
         spot.terrainLabel = terrainItem ? terrainItem.label : spot.terrain;
         return spot;
@@ -97,11 +101,10 @@ Page({
     }
   },
 
-  // 加载禁钓区
+  // ---------- 禁钓区 ----------
   async loadForbiddenZones() {
     try {
       const zones = await getForbiddenZones();
-      // 转为地图组件需要的 polygons 格式
       const polygons = (zones || []).map(zone => ({
         id: zone.id,
         name: zone.name,
@@ -120,32 +123,69 @@ Page({
     }
   },
 
-  // 检查当前坐标是否在禁钓区
   checkForbiddenZone(lat, lng) {
     const { polygons } = this.data;
     if (!polygons || polygons.length === 0) return;
-
     const zones = polygons.map(p => ({
       id: p.id,
       name: p.name,
       description: p.description,
       coordinates: p.points.map(pt => [pt.longitude, pt.latitude]),
     }));
-
     const hit = isInForbiddenZone({ latitude: lat, longitude: lng }, zones);
     if (hit) {
       this.setData({ forbiddenZone: hit, showForbiddenModal: true });
     }
   },
 
-  // 地图类型切换
-  switchMapType() {
-    this.setData({
-      mapType: this.data.mapType === 'map' ? 'satellite' : 'map',
+  // ---------- P1: 筛选 ----------
+  openFilter() {
+    this.setData({ showFilter: true });
+  },
+
+  closeFilter() {
+    this.setData({ showFilter: false });
+  },
+
+  onFilterConfirm(e) {
+    const params = e.detail;
+    const { userLocation } = this.data;
+    const queryParams = {
+      ...params,
+      lat: userLocation ? userLocation.lat : constants.MAP.DEFAULT_LAT,
+      lng: userLocation ? userLocation.lng : constants.MAP.DEFAULT_LNG,
+      radius_km: 50,
+    };
+    this.setData({ showFilter: false, filterActive: true, filterParams: queryParams });
+    wx.showLoading({ title: '筛选中...' });
+    filterSpots(queryParams).then(res => {
+      wx.hideLoading();
+      const spots = ((res.items || []) || []).map(spot => {
+        if (userLocation) {
+          spot.distance = formatDistance(
+            distance(userLocation.lat, userLocation.lng, spot.latitude, spot.longitude)
+          );
+        }
+        return spot;
+      });
+      this.setData({ satellites: spots, filteredSpots: spots });
+      wx.showToast({ title: `找到${spots.length}个钓点`, icon: 'none' });
+    }).catch(() => {
+      wx.hideLoading();
+      wx.showToast({ title: '筛选失败', icon: 'none' });
     });
   },
 
-  // 定位到我的位置
+  clearFilter() {
+    this.setData({ filterActive: false, filterParams: {}, filteredSpots: null });
+    this.loadSpots();
+  },
+
+  // ---------- 地图操作 ----------
+  switchMapType() {
+    this.setData({ mapType: this.data.mapType === 'map' ? 'satellite' : 'map' });
+  },
+
   relocate() {
     if (!this.data.locationEnabled) {
       wx.showToast({ title: '定位未开启', icon: 'none' });
@@ -156,7 +196,6 @@ Page({
     this.mapCtx && this.mapCtx.moveToLocation && this.mapCtx.moveToLocation();
   },
 
-  // 点击地图标点
   onMarkerTap(e) {
     const { markerId } = e.detail;
     const spot = this.data.satellites.find(s => s.id === markerId);
@@ -165,12 +204,11 @@ Page({
     }
   },
 
-  // 点击地图空白处
   onMapTap() {
     this.setData({ showSpotPanel: false, selectedSpot: null });
   },
 
-  // 进入标点详情
+  // ---------- 导航 ----------
   goToDetail() {
     const { selectedSpot } = this.data;
     if (!selectedSpot) return;
@@ -179,7 +217,6 @@ Page({
     });
   },
 
-  // 新建标点
   goToCreate() {
     const { latitude, longitude } = this.data;
     wx.navigateTo({
@@ -187,7 +224,6 @@ Page({
     });
   },
 
-  // 去天气详情
   goToWeather() {
     const { latitude, longitude } = this.data;
     wx.navigateTo({
@@ -195,12 +231,17 @@ Page({
     });
   },
 
-  // 禁钓区弹窗关闭
+  // ---------- P1: AI推荐入口 ----------
+  goToRecommend() {
+    wx.navigateTo({ url: '/pages/recommend/recommend' });
+  },
+
+  // ---------- 禁钓区 ----------
   onForbiddenClose() {
     this.setData({ showForbiddenModal: false });
   },
 
-  // 微信分享
+  // ---------- 分享 ----------
   onShareAppMessage() {
     const { selectedSpot } = this.data;
     if (selectedSpot) {

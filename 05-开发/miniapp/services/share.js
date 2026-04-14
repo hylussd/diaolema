@@ -1,5 +1,5 @@
 /**
- * 分享服务 - 生成小程序码/链接
+ * 分享服务 - 生成小程序码/链接 + Token管理
  */
 const { request } = require('../utils/request');
 
@@ -30,4 +30,47 @@ function getShareLink(path, query = {}) {
   });
 }
 
-module.exports = { generateQrcode, getShareLink };
+// ---------- P1: Token管理 ----------
+
+/**
+ * 生成分享Token（创建加密分享链接）
+ * @param {number} spotId
+ * @param {number} validDays - 有效期天数，默认7
+ */
+function createToken(spotId, validDays = 7) {
+  return request({
+    url: '/api/share/tokens',
+    method: 'POST',
+    data: { spot_id: spotId, valid_days: validDays },
+  });
+}
+
+/**
+ * 通过Token获取标点信息
+ * @param {string} token
+ */
+function getToken(token) {
+  return request({
+    url: `/api/share/tokens/${token}`,
+    method: 'GET',
+  });
+}
+
+/**
+ * 撤销分享Token
+ * @param {string} token
+ */
+function revokeToken(token) {
+  return request({
+    url: `/api/share/tokens/${token}`,
+    method: 'DELETE',
+  });
+}
+
+module.exports = {
+  generateQrcode,
+  getShareLink,
+  createToken,
+  getToken,
+  revokeToken,
+};

@@ -1,0 +1,65 @@
+<!-- pages/checkin/checkin.wxml -->
+<view class="page">
+  <!-- 标点信息 -->
+  <view class="spot-banner" wx:if="{{spotName}}">
+    <text class="spot-name">{{spotName}}</text>
+  </view>
+
+  <!-- 当前天气 -->
+  <view class="section" wx:if="{{weather || weatherLoading}}">
+    <view class="section-title">当前天气（自动获取）</view>
+    <view class="weather-row" wx:if="{{weather}}">
+      <text class="w-temp">{{weather.temp}}° {{weather.condition}}</text>
+      <text class="w-detail">气压 {{weather.pressure}}hPa · 风力 {{weather.windScale}}级</text>
+    </view>
+    <text class="loading-hint" wx:if="{{weatherLoading}}">加载中...</text>
+  </view>
+
+  <!-- 选择鱼种 -->
+  <view class="section">
+    <view class="section-title">钓到了什么鱼？<text class="required">*</text></view>
+    <view class="fish-grid">
+      <view
+        wx:for="{{fishSpecies}}"
+        wx:key="*this"
+        class="fish-chip {{selectedFish.indexOf(item) !== -1 ? 'active' : ''}}"
+        bindtap="onFishToggle"
+        data-fish="{{item}}"
+      >{{item}}</view>
+    </view>
+    <view class="selected-fish" wx:if="{{selectedFish.length > 0}}">
+      已选：{{selectedFish.join('、')}}
+    </view>
+  </view>
+
+  <!-- 渔获重量 -->
+  <view class="section">
+    <view class="section-title">总重量（kg）</view>
+    <input
+      class="weight-input"
+      type="digit"
+      placeholder="选填，如 2.5"
+      value="{{weightKg}}"
+      bindinput="onWeightInput"
+    />
+  </view>
+
+  <!-- 备注 -->
+  <view class="section">
+    <view class="section-title">备注</view>
+    <textarea
+      class="notes-input"
+      placeholder="选填，如早口不错、下午鱼口变慢..."
+      value="{{notes}}"
+      bindinput="onNotesInput"
+      maxlength="200"
+    />
+  </view>
+
+  <!-- 提交 -->
+  <view class="submit-area">
+    <button class="btn-submit" bindtap="onSubmit" loading="{{submitting}}">
+      记录打卡
+    </button>
+  </view>
+</view>

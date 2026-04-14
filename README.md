@@ -99,12 +99,17 @@ uv run python -m app.main
 |---|---|---|
 | 标点 | `GET/POST /api/spots` | 获取列表 / 创建标点 |
 | 标点 | `GET/PUT/DELETE /api/spots/{id}` | 详情 / 更新 / 删除 |
+| 标点 | `GET /api/spots/public/filter` | 多参数筛选 |
+| 标点 | `POST /api/spots/ai-recommend` | AI推荐（规则引擎） |
 | 分类 | `GET/POST /api/categories` | 获取 / 创建分类 |
 | 分类 | `PUT/DELETE /api/categories/{id}` | 更新 / 删除分类 |
 | 禁钓区 | `GET /api/forbidden-zones` | 获取所有禁钓区 |
 | 禁钓区 | `POST /api/forbidden-zones/check` | 检查坐标是否在禁钓区 |
 | 天气 | `GET /api/weather` | 获取当前位置天气 |
+| 天文 | `GET /api/astronomy` | 月相 / 日出日落 |
+| 打卡 | `POST/GET/DELETE /api/checkins` | 打卡记录 CRUD |
 | 分享 | `GET /api/share/spot/{id}` | 生成标点分享码 |
+| 分享 | `POST/GET/DELETE /api/share/tokens` | 加密Token生成/访问/撤销 |
 
 ---
 
@@ -117,6 +122,14 @@ uv run python -m app.main
 ---
 
 ## 更新日志
+
+### 2026-04-14 — P1 差异化
+- 多参数筛选（气压/水温/鱼种/钓场类型组合，筛选面板）
+- AI推荐（规则引擎，10鱼种评分矩阵，输出推荐理由）
+- 标点详情增强（天气关联 + 历史打卡 + AI理由卡片）
+- 微信定向分享（加密Token，1-7天有效期，过期自动失效）
+- 月相/日出日落（Jean Meeus天文公式，无需API）
+- 打卡功能（鱼种/重量/天气关联记录）
 
 ### 2026-04-14 — P0 MVP
 - 地图 + 标点 CRUD + 分类管理

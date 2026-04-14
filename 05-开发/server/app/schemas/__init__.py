@@ -22,4 +22,7 @@ from app.schemas.forbidden_zone import (
     ForbiddenZoneCheckResponse,
 )
 from app.schemas.weather import WeatherResponse
-from app.schemas.common import ApiResponse, PageMeta
+from app.schemas.common import ApiResponse
+from app.schemas.spot_checkin import CheckinCreate, CheckinResponse
+from app.schemas.share_token import ShareTokenCreate, ShareTokenResponse, ShareTokenVisitResponse
+from app.schemas.astronomy import AstronomyResponse, BestFishingSlot

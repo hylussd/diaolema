@@ -1,0 +1,106 @@
+<!-- pages/recommend/recommend.wxml -->
+<view class="page">
+  <!-- 地图预览 -->
+  <map
+    class="map-preview"
+    style="height: {{mapHeight}}px"
+    latitude="{{latitude}}"
+    longitude="{{longitude}}"
+    scale="12"
+    markers="{{spots.length > 0 ? mapMarkers : []}}"
+    show-location
+  />
+  <view class="map-overlay">
+    <view class="loc-chip" bindtap="relocate">
+      <text>📍</text>
+      <text>{{hasLocation ? '重新定位' : '定位未开启'}}</text>
+    </view>
+  </view>
+
+  <!-- 筛选表单 -->
+  <view class="filter-card">
+    <view class="filter-row">
+      <view class="filter-item">
+        <view class="filter-label">目标鱼种</view>
+        <view class="fish-scroll">
+          <view
+            wx:for="{{fishSpecies}}"
+            wx:key="*this"
+            class="fish-chip {{selectedFish === item ? 'active' : ''}}"
+            bindtap="onFishSelect"
+            data-fish="{{item}}"
+          >{{item}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="filter-row two-col">
+      <view class="filter-item">
+        <view class="filter-label">日期</view>
+        <picker mode="date" value="{{date}}" bindchange="onDateChange">
+          <view class="picker-val">{{date}}</view>
+        </picker>
+      </view>
+      <view class="filter-item">
+        <view class="filter-label">时段</view>
+        <picker mode="selector" range="{{timeSlots}}" range-key="label" bindchange="onSlotChange" value="{{selectedSlotIndex}}">
+          <view class="picker-val">{{timeSlots[selectedSlotIndex].label}}</view>
+        </picker>
+      </view>
+    </view>
+
+    <button class="btn-recommend" bindtap="onRecommend" loading="{{loading}}">
+      {{loading ? '分析中...' : '🔮 AI推荐'}}
+    </button>
+  </view>
+
+  <!-- 综合建议 -->
+  <view class="advice-card" wx:if="{{generalAdvice}}">
+    <view class="advice-title">💡 综合建议</view>
+    <text class="advice-text">{{generalAdvice}}</text>
+  </view>
+
+  <!-- 结果列表 -->
+  <view class="result-list" wx:if="{{spots.length > 0}}">
+    <view class="result-title">推荐钓点（{{spots.length}}个）</view>
+    <view
+      wx:for="{{spots}}"
+      wx:key="id"
+      class="result-card"
+      bindtap="goToDetail"
+      data-id="{{item.id}}"
+    >
+      <!-- 分数标签 -->
+      <view class="score-badge">
+        <text class="score-num">{{item.score}}</text>
+        <text class="score-label">分</text>
+      </view>
+
+      <view class="result-body">
+        <view class="result-header">
+          <text class="result-name">{{item.name}}</text>
+          <text class="result-dist" wx:if="{{item.distance}}">{{item.distance}}</text>
+        </view>
+        <view class="result-tags">
+          <view class="tag">{{item.terrain}}</view>
+          <view class="tag tag-fish" wx:for="{{item.fish_species || []}}" wx:key="*this" wx:for-item="f">
+            {{f}}
+          </view>
+        </view>
+        <!-- 推荐理由 -->
+        <view class="reason-list" wx:if="{{item.reasons && item.reasons.length > 0}}">
+          <text wx:for="{{item.reasons}}" wx:key="*this" class="reason-tag">· {{item}}</text>
+        </view>
+        <view class="result-actions">
+          <view class="action-btn" bindtap="goToMap" data-spot="{{item}}">导航 ›</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!loading && !result}}">
+    <text class="empty-icon">🎣</text>
+    <text class="empty-tip">选择鱼种和时间，获取AI推荐</text>
+  </view>
+</view>

@@ -6,7 +6,10 @@
     "pages/spot-edit/spot-edit",
     "pages/category/category",
     "pages/weather/weather",
-    "pages/settings/settings"
+    "pages/settings/settings",
+    "pages/recommend/recommend",
+    "pages/share-view/share-view",
+    "pages/checkin/checkin"
   ],
   "window": {
     "navigationBarBackgroundColor": "#1a1a2e",
@@ -29,16 +32,16 @@
         "selectedIconPath": "assets/icons/map-active.png"
       },
       {
+        "pagePath": "pages/recommend/recommend",
+        "text": "推荐",
+        "iconPath": "assets/icons/recommend.png",
+        "selectedIconPath": "assets/icons/recommend-active.png"
+      },
+      {
         "pagePath": "pages/spot-list/spot-list",
         "text": "标点",
         "iconPath": "assets/icons/spot.png",
         "selectedIconPath": "assets/icons/spot-active.png"
-      },
-      {
-        "pagePath": "pages/category/category",
-        "text": "分类",
-        "iconPath": "assets/icons/category.png",
-        "selectedIconPath": "assets/icons/category-active.png"
       },
       {
         "pagePath": "pages/settings/settings",

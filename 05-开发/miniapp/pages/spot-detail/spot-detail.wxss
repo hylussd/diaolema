@@ -123,3 +123,218 @@
 .actions .btn {
   flex: 1;
 }
+
+/* P1: AI推荐理由 */
+.ai-reason {
+  background: #f8fafc;
+  border-radius: 12rpx;
+  padding: 16rpx;
+}
+
+.ai-score-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.ai-score-label {
+  font-size: 24rpx;
+  color: #6b7280;
+}
+
+.ai-score-badge {
+  display: flex;
+  align-items: baseline;
+  background: #3b82f6;
+  border-radius: 12rpx;
+  padding: 6rpx 16rpx;
+}
+
+.ai-score-num {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #fff;
+}
+
+.ai-score-unit {
+  font-size: 22rpx;
+  color: rgba(255,255,255,0.7);
+  margin-left: 4rpx;
+}
+
+.ai-reasons {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.reason-item {
+  font-size: 24rpx;
+  color: #374151;
+  line-height: 1.5;
+}
+
+/* P1: 打卡记录 */
+.section-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.section-title-row .section-title {
+  margin-bottom: 0;
+}
+
+.checkin-btn {
+  font-size: 26rpx;
+  color: #3b82f6;
+  font-weight: 500;
+}
+
+.loading-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx;
+}
+
+.empty-checkins {
+  text-align: center;
+  padding: 20rpx;
+}
+
+.checkin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  margin-top: 8rpx;
+}
+
+.checkin-item {
+  background: #f9fafb;
+  border-radius: 12rpx;
+  padding: 16rpx;
+  position: relative;
+}
+
+.checkin-header {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 6rpx;
+}
+
+.checkin-date {
+  font-size: 24rpx;
+  color: #9ca3af;
+}
+
+.checkin-fish {
+  font-size: 26rpx;
+  font-weight: 600;
+}
+
+.checkin-weight {
+  font-size: 24rpx;
+}
+
+.checkin-meta {
+  margin-bottom: 4rpx;
+}
+
+.checkin-notes {
+  color: #6b7280;
+  margin-top: 4rpx;
+}
+
+.checkin-del {
+  position: absolute;
+  top: 12rpx;
+  right: 12rpx;
+  font-size: 22rpx;
+  color: #ef4444;
+}
+
+/* P1: 分享Token弹窗 */
+.token-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.token-modal {
+  width: 90%;
+  max-width: 600rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  overflow: hidden;
+}
+
+.token-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32rpx 32rpx 24rpx;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.token-modal-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.token-modal-close {
+  font-size: 36rpx;
+  color: #9ca3af;
+}
+
+.token-modal-body {
+  padding: 24rpx 32rpx;
+}
+
+.share-url-box {
+  background: #f9fafb;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  word-break: break-all;
+}
+
+.share-url-text {
+  font-size: 24rpx;
+  color: #374151;
+  line-height: 1.6;
+}
+
+.share-expire {
+  margin-top: 12rpx;
+}
+
+.token-modal-footer {
+  padding: 24rpx 32rpx;
+  padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
+  border-top: 1px solid #f3f4f6;
+}
+
+.btn-copy {
+  width: 100%;
+  height: 88rpx;
+  background: #3b82f6;
+  color: #fff;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+

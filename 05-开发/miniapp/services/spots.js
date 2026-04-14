@@ -1,7 +1,9 @@
 /**
- * API 基础服务封装
+ * 标点服务 - CRUD + 筛选 + AI推荐
  */
 const { request } = require('../utils/request');
+
+// ---------- 基础 CRUD ----------
 
 function getSpots(params) {
   return request({ url: '/api/spots', method: 'GET', data: params });
@@ -23,4 +25,33 @@ function deleteSpot(id) {
   return request({ url: `/api/spots/${id}`, method: 'DELETE' });
 }
 
-module.exports = { getSpots, getSpot, createSpot, updateSpot, deleteSpot };
+// ---------- P1: 多参数筛选 ----------
+
+/**
+ * 多条件筛选钓点
+ * @param {object} params - { lat, lng, radius_km, pressure_min, pressure_max,
+ *                            temp_min, temp_max, fish_species, category_type, offset, limit }
+ */
+function filterSpots(params) {
+  return request({ url: '/api/spots/public/filter', method: 'GET', data: params });
+}
+
+// ---------- P1: AI推荐 ----------
+
+/**
+ * AI推荐钓点
+ * @param {object} body - { target_fish, date, time_slot, lat, lng, radius_km }
+ */
+function aiRecommend(body) {
+  return request({ url: '/api/spots/ai-recommend', method: 'POST', data: body });
+}
+
+module.exports = {
+  getSpots,
+  getSpot,
+  createSpot,
+  updateSpot,
+  deleteSpot,
+  filterSpots,
+  aiRecommend,
+};

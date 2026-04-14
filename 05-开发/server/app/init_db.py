@@ -16,6 +16,8 @@ from app.models.category import Category
 from app.models.fishing_spot import FishingSpot
 from app.models.forbidden_zone import ForbiddenZone
 from app.models.weather_cache import WeatherCache
+from app.models.spot_checkin import SpotCheckin
+from app.models.share_token import ShareToken
 
 
 # 预置禁钓区数据（polygon 存为 JSON 字符串，格式 [[lng, lat], ...]）

@@ -1,0 +1,127 @@
+.page {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding: 20rpx;
+  padding-bottom: 160rpx;
+}
+
+.spot-banner {
+  background: #1a1a2e;
+  color: #fff;
+  padding: 20rpx 24rpx;
+  border-radius: 16rpx;
+  margin-bottom: 16rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.section {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 16rpx;
+}
+
+.required {
+  color: #ef4444;
+}
+
+.weather-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.w-temp {
+  font-size: 36rpx;
+  color: #1f2937;
+}
+
+.w-detail {
+  font-size: 24rpx;
+  color: #6b7280;
+}
+
+.loading-hint {
+  font-size: 24rpx;
+  color: #9ca3af;
+}
+
+.fish-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.fish-chip {
+  padding: 12rpx 24rpx;
+  border-radius: 40rpx;
+  background: #f3f4f6;
+  color: #4b5563;
+  font-size: 26rpx;
+  transition: all 0.15s;
+}
+
+.fish-chip.active {
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+.selected-fish {
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  color: #3b82f6;
+}
+
+.weight-input {
+  height: 88rpx;
+  background: #f9fafb;
+  border-radius: 12rpx;
+  padding: 0 24rpx;
+  font-size: 28rpx;
+  color: #1f2937;
+}
+
+.notes-input {
+  width: 100%;
+  min-height: 160rpx;
+  background: #f9fafb;
+  border-radius: 12rpx;
+  padding: 20rpx 24rpx;
+  font-size: 28rpx;
+  color: #1f2937;
+  box-sizing: border-box;
+}
+
+.submit-area {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  background: #fff;
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+}
+
+.btn-submit {
+  width: 100%;
+  height: 88rpx;
+  background: #3b82f6;
+  color: #fff;
+  border-radius: 16rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}

@@ -1,0 +1,101 @@
+<!-- pages/share-view/share-view.wxml -->
+<view class="page">
+  <!-- 加载态 -->
+  <view class="state-wrap" wx:if="{{loading}}">
+    <text class="loading-icon">⏳</text>
+    <text class="state-text">正在加载...</text>
+  </view>
+
+  <!-- 过期态 -->
+  <view class="state-wrap expired" wx:if="{{!loading && error === 'expired'}}">
+    <text class="expired-icon">🔗</text>
+    <text class="state-title">链接已过期</text>
+    <text class="state-text">此分享链接已超过有效期，无法继续访问。</text>
+    <text class="state-sub">有效期最長7天，请联系分享者重新生成。</text>
+    <button class="btn-go-home" bindtap="goHome">返回首页</button>
+  </view>
+
+  <!-- 不存在 -->
+  <view class="state-wrap expired" wx:if="{{!loading && error === 'notfound'}}">
+    <text class="expired-icon">❓</text>
+    <text class="state-title">链接不存在</text>
+    <text class="state-text">此分享链接无效或已被删除。</text>
+    <button class="btn-go-home" bindtap="goHome">返回首页</button>
+  </view>
+
+  <!-- 正常内容 -->
+  <block wx:if="{{!loading && spot && !error}}">
+    <!-- 地图预览 -->
+    <map
+      class="mini-map"
+      latitude="{{spot.latitude}}"
+      longitude="{{spot.longitude}}"
+      scale="14"
+      markers="{{[{id: 1, latitude: spot.latitude, longitude: spot.longitude, iconPath: '/assets/icons/marker.png', width: 36, height: 44}]}}"
+      bindtap="goToMap"
+    />
+    <view class="map-tip">点击地图导航</view>
+
+    <!-- 标点信息 -->
+    <view class="section spot-section">
+      <view class="spot-name-row">
+        <text class="spot-name">{{spot.name}}</text>
+        <view class="remaining-chip">
+          <text>剩余 {{remainingDays}} 天</text>
+        </view>
+      </view>
+
+      <view class="info-row">
+        <text class="info-label">坐标</text>
+        <text class="info-value coord-text" bindtap="copyCoords">
+          {{spot.latitude.toFixed(6)}}, {{spot.longitude.toFixed(6)}}
+          <text class="copy-btn">📋 复制</text>
+        </text>
+      </view>
+
+      <view class="info-row" wx:if="{{spot.terrain}}">
+        <text class="info-label">地形</text>
+        <view class="tag">{{spot.terrain}}</view>
+      </view>
+
+      <view class="info-row" wx:if="{{spot.fish_species && spot.fish_species.length > 0}}">
+        <text class="info-label">鱼种</text>
+        <view class="tags-wrap">
+          <view class="tag tag-fish" wx:for="{{spot.fish_species}}" wx:key="*this">{{item}}</view>
+        </view>
+      </view>
+
+      <view class="info-row" wx:if="{{spot.description}}">
+        <text class="info-label">备注</text>
+        <text class="info-value">{{spot.description}}</text>
+      </view>
+
+      <view class="info-row" wx:if="{{spot.price_info}}">
+        <text class="info-label">收费</text>
+        <text class="info-value">{{spot.price_info}}</text>
+      </view>
+    </view>
+
+    <!-- 当前天气 -->
+    <view class="section" wx:if="{{weather}}">
+      <view class="section-title">当前天气</view>
+      <view class="weather-summary">
+        <view>
+          <text class="w-temp">{{weather.temp}}°</text>
+          <text class="w-condition">{{weather.condition}}</text>
+        </view>
+        <view class="w-details">
+          <text>气压 {{weather.pressure}}hPa</text>
+          <text>风力 {{weather.windScale}}级</text>
+          <text>湿度 {{weather.humidity}}%</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="action-row">
+      <button class="btn-nav" bindtap="goToMap">🗺️ 导航到此处</button>
+      <button class="btn-detail" bindtap="goToDetail">查看完整详情</button>
+    </view>
+  </block>
+</view>
