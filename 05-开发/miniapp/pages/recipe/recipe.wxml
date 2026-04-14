@@ -1,0 +1,160 @@
+<!-- pages/recipe/recipe.wxml -->
+<view class="page">
+  <!-- 配方列表 -->
+  <view class="recipe-list" wx:if="{{!loading && recipes.length > 0}}">
+    <view
+      wx:for="{{recipes}}"
+      wx:key="id"
+      class="recipe-card"
+    >
+      <view class="recipe-header">
+        <text class="recipe-name">{{item.name}}</text>
+        <view class="recipe-tags">
+          <text class="tag {{item.is_public ? 'tag-public' : 'tag-private'}}">
+            {{item.is_public ? '公开' : '私有'}}
+          </text>
+          <text class="tag tag-fish" wx:if="{{item.fish_species}}">{{item.fish_species}}</text>
+          <text class="tag tag-type" wx:if="{{item.spot_type}}">{{item.spot_type}}</text>
+        </view>
+      </view>
+      <view class="recipe-conditions">
+        <view class="condition-item">
+          <text class="cond-label">气压</text>
+          <text class="cond-value">{{item.pressure_min}}~{{item.pressure_max}} hPa</text>
+        </view>
+        <view class="condition-item">
+          <text class="cond-label">水温</text>
+          <text class="cond-value">{{item.water_temp_min}}~{{item.water_temp_max}} °C</text>
+        </view>
+      </view>
+      <view class="recipe-actions">
+        <view class="btn-text" bindtap="onTogglePublic" data-recipe="{{item}}">
+          {{item.is_public ? '设为私有' : '设为公开'}}
+        </view>
+        <view class="btn-text" bindtap="onEditRecipe" data-recipe="{{item}}">编辑</view>
+        <view class="btn-text btn-danger" bindtap="onDeleteRecipe" data-id="{{item.id}}">删除</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!loading && recipes.length === 0}}">
+    <text class="empty-text">暂无配方</text>
+    <text class="empty-hint">点击下方「+」创建你的第一个配方</text>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-state" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 悬浮添加按钮 -->
+  <view class="fab" bindtap="onAddRecipe">+</view>
+
+  <!-- 创建/编辑表单 -->
+  <view class="form-overlay" wx:if="{{showForm}}" bindtap="onCloseForm">
+    <view class="form-sheet" catchtap="noop">
+      <view class="form-title">{{editingId ? '编辑配方' : '创建配方'}}</view>
+
+      <view class="form-field">
+        <text class="form-label">配方名称 *</text>
+        <input
+          class="form-input"
+          placeholder="如：春季鲫鱼配方"
+          value="{{formName}}"
+          data-field="formName"
+          bindinput="onFormInput"
+          maxlength="50"
+        />
+      </view>
+
+      <view class="form-field">
+        <text class="form-label">目标鱼种 *</text>
+        <picker
+          mode="selector"
+          range="{{fishSpeciesList}}"
+          value="{{fishSpeciesList.indexOf(formFishSpecies)}}"
+          bindchange="onFishSpeciesChange"
+        >
+          <view class="picker-value {{formFishSpecies ? '' : 'placeholder'}}">
+            {{formFishSpecies || '请选择鱼种'}}
+          </view>
+        </picker>
+      </view>
+
+      <view class="form-row">
+        <view class="form-field">
+          <text class="form-label">气压下限(hPa)</text>
+          <input
+            class="form-input"
+            type="number"
+            placeholder="如 1000"
+            value="{{formPressureMin}}"
+            data-field="formPressureMin"
+            bindinput="onFormInput"
+          />
+        </view>
+        <view class="form-field">
+          <text class="form-label">气压上限(hPa)</text>
+          <input
+            class="form-input"
+            type="number"
+            placeholder="如 1020"
+            value="{{formPressureMax}}"
+            data-field="formPressureMax"
+            bindinput="onFormInput"
+          />
+        </view>
+      </view>
+
+      <view class="form-row">
+        <view class="form-field">
+          <text class="form-label">水温下限(°C)</text>
+          <input
+            class="form-input"
+            type="digit"
+            placeholder="如 15"
+            value="{{formWaterTempMin}}"
+            data-field="formWaterTempMin"
+            bindinput="onFormInput"
+          />
+        </view>
+        <view class="form-field">
+          <text class="form-label">水温上限(°C)</text>
+          <input
+            class="form-input"
+            type="digit"
+            placeholder="如 25"
+            value="{{formWaterTempMax}}"
+            data-field="formWaterTempMax"
+            bindinput="onFormInput"
+          />
+        </view>
+      </view>
+
+      <view class="form-field">
+        <text class="form-label">钓场类型</text>
+        <picker
+          mode="selector"
+          range="{{spotTypes}}"
+          value="{{spotTypes.indexOf(formSpotType)}}"
+          bindchange="onSpotTypeChange"
+        >
+          <view class="picker-value {{formSpotType ? '' : 'placeholder'}}">
+            {{formSpotType || '请选择（可选）'}}
+          </view>
+        </picker>
+      </view>
+
+      <view class="form-field form-switch">
+        <text class="form-label">公开配方</text>
+        <switch color="#3b82f6" checked="{{formIsPublic}}" bindchange="onPublicSwitch" />
+      </view>
+
+      <view class="form-btns">
+        <button class="btn-cancel" bindtap="onCloseForm">取消</button>
+        <button class="btn-confirm" bindtap="onSubmitForm">保存</button>
+      </view>
+    </view>
+  </view>
+</view>

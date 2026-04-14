@@ -9,6 +9,8 @@
     "pages/settings/settings",
     "pages/recommend/recommend",
     "pages/share-view/share-view",
+    "pages/recipe/recipe",
+    "pages/crowd-report/crowd-report",
     "pages/checkin/checkin"
   ],
   "window": {

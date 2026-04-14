@@ -26,3 +26,6 @@ from app.schemas.common import ApiResponse
 from app.schemas.spot_checkin import CheckinCreate, CheckinResponse
 from app.schemas.share_token import ShareTokenCreate, ShareTokenResponse, ShareTokenVisitResponse
 from app.schemas.astronomy import AstronomyResponse, BestFishingSlot
+from app.schemas.crowd_report import CrowdReportCreate, CrowdReportResponse
+from app.schemas.recipe import RecipeCreate, RecipeUpdate, RecipeResponse
+from app.schemas.spot_rating import SpotRatingUpsert, SpotRatingSummary

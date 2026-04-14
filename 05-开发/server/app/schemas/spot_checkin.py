@@ -1,4 +1,4 @@
-"""打卡记录 Schema。"""
+"""打卡记录 Schema（含 P2 扩展字段）。"""
 from datetime import datetime
 from typing import Any
 import json
@@ -21,6 +21,8 @@ class CheckinCreate(BaseModel):
     fish_caught: list[str] | None = None
     weight_kg: float | None = Field(None, gt=0, le=999)
     notes: str | None = None
+    fishing_method: str | None = Field(None, max_length=16)
+    is_public: bool = Field(default=False)
 
 
 class CheckinResponse(BaseModel):
@@ -35,6 +37,9 @@ class CheckinResponse(BaseModel):
     notes: str | None
     checkin_time: datetime
     created_at: datetime
+    fishing_method: str | None = None
+    is_public: bool = False
+    crowd_report_id: int | None = None
 
     class Config:
         from_attributes = True
@@ -53,4 +58,7 @@ class CheckinResponse(BaseModel):
             notes=obj.notes,
             checkin_time=obj.checkin_time,
             created_at=obj.created_at,
+            fishing_method=obj.fishing_method,
+            is_public=bool(obj.is_public),
+            crowd_report_id=obj.crowd_report_id,
         )

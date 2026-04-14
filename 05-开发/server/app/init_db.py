@@ -18,6 +18,9 @@ from app.models.forbidden_zone import ForbiddenZone
 from app.models.weather_cache import WeatherCache
 from app.models.spot_checkin import SpotCheckin
 from app.models.share_token import ShareToken
+from app.models.crowd_report import CrowdReport
+from app.models.recipe import Recipe
+from app.models.spot_rating import SpotRating
 
 
 # 预置禁钓区数据（polygon 存为 JSON 字符串，格式 [[lng, lat], ...]）
@@ -98,6 +101,36 @@ async def init_db():
         # 建表（全部模型）
         await conn.run_sync(Base.metadata.create_all)
         print("✅ 数据表创建完成")
+
+        # P2: 扩展 spot_checkins（向后兼容，字段可能已存在）
+        for col_sql in [
+            "ALTER TABLE spot_checkins ADD COLUMN fishing_method TEXT",
+            "ALTER TABLE spot_checkins ADD COLUMN is_public INTEGER DEFAULT 0",
+            "ALTER TABLE spot_checkins ADD COLUMN crowd_report_id INTEGER REFERENCES crowd_reports(id)",
+        ]:
+            try:
+                await conn.execute(text(col_sql))
+                print(f"  ✅ {col_sql[:40]}...")
+            except Exception as e:
+                if "duplicate column" in str(e).lower() or "already exists" in str(e).lower():
+                    print(f"  ⚠️  列已存在，跳过: {col_sql[:40]}...")
+                else:
+                    print(f"  ⚠️  {col_sql[:40]}...: {e}")
+
+        # P2: 新建 crowd_reports 索引（可能已存在）
+        for idx_sql in [
+            "CREATE INDEX IF NOT EXISTS idx_reports_user_spot_date ON crowd_reports(user_id, spot_id, date(report_time))",
+            "CREATE INDEX IF NOT EXISTS idx_reports_spot_id ON crowd_reports(spot_id)",
+            "CREATE INDEX IF NOT EXISTS idx_recipes_user_id ON recipes(user_id)",
+            "CREATE INDEX IF NOT EXISTS idx_ratings_spot_id ON spot_ratings(spot_id)",
+        ]:
+            try:
+                await conn.execute(text(idx_sql))
+            except Exception as e:
+                if "already exists" in str(e).lower():
+                    pass
+                else:
+                    print(f"  ⚠️  索引: {e}")
 
     async with async_session_maker() as session:
         # 检查是否已有数据

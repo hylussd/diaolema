@@ -43,4 +43,10 @@ module.exports = {
     WARNING: 'warning',
     FORBIDDEN: 'forbidden',
   },
+
+  // P2: 钓法枚举
+  FISHING_METHODS: ['台钓', '路亚', '传统钓', '飞蝇钓', '海竿', '手竿'],
+
+  // P2: 钓场类型
+  SPOT_TYPES: ['河流', '湖泊', '水库', '池塘', '其他'],
 };

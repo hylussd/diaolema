@@ -1,4 +1,4 @@
-"""打卡记录 CRUD 路由。"""
+"""打卡记录 CRUD 路由（含 P2 扩展）。"""
 import json
 from datetime import datetime, timezone
 from typing import Annotated
@@ -9,7 +9,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models.spot_checkin import SpotCheckin
 from app.models.weather_cache import WeatherCache
+from app.models.fishing_spot import FishingSpot
 from app.schemas.spot_checkin import CheckinCreate, CheckinResponse
+from app.services.anti_spam_service import anti_spam_service
 
 router = APIRouter()
 
@@ -33,12 +35,14 @@ def _checkin_to_dict(c: SpotCheckin) -> dict:
         "notes": c.notes,
         "checkin_time": c.checkin_time.isoformat() if c.checkin_time else None,
         "created_at": c.created_at.isoformat() if c.created_at else None,
+        "fishing_method": c.fishing_method,
+        "is_public": bool(c.is_public),
+        "crowd_report_id": c.crowd_report_id,
     }
 
 
 async def _fetch_current_weather(db: AsyncSession, spot_id: int) -> dict:
     """从 weather_cache 读取最新天气数据。"""
-    from app.models.fishing_spot import FishingSpot
     result = await db.execute(select(FishingSpot).where(FishingSpot.id == spot_id))
     spot = result.scalar_one_or_none()
     if not spot:
@@ -62,6 +66,9 @@ async def create_checkin(
     user_id: int = Query(1, description="用户ID，TODO: 替换为真实认证"),
 ):
     """新增打卡记录，自动关联当日天气。"""
+    # P2: 钓法枚举校验
+    anti_spam_service.validate_fishing_method(data.fishing_method)
+
     # 写入天气
     weather = await _fetch_current_weather(db, data.spot_id)
     fish_caught_json = json.dumps(data.fish_caught, ensure_ascii=False) if data.fish_caught else None
@@ -76,13 +83,21 @@ async def create_checkin(
         pressure=weather.get("pressure"),
         notes=data.notes,
         checkin_time=datetime.now(timezone.utc),
+        fishing_method=data.fishing_method,
+        is_public=1 if data.is_public else 0,
     )
     db.add(checkin)
     await db.commit()
     await db.refresh(checkin)
     return {
         "code": 0,
-        "data": {"id": checkin.id, "spot_id": checkin.spot_id, "checkin_time": checkin.checkin_time.isoformat()},
+        "data": {
+            "id": checkin.id,
+            "spot_id": checkin.spot_id,
+            "checkin_time": checkin.checkin_time.isoformat(),
+            "fishing_method": checkin.fishing_method,
+            "is_public": bool(checkin.is_public),
+        },
         "msg": "打卡成功",
     }
 
@@ -92,19 +107,35 @@ async def list_checkins(
     db: Annotated[AsyncSession, Depends(get_db)],
     spot_id: int | None = Query(None),
     user_id: int | None = Query(None),
+    is_public: bool | None = Query(None, description="是否仅公开记录"),
     offset: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
+    current_user_id: int = Query(None, description="当前登录用户ID"),
 ):
-    """查询打卡记录。"""
+    """查询打卡记录。默认返回当前用户的记录；传 is_public=True 时返回公开记录。"""
     stmt = select(SpotCheckin)
     count_stmt = select(func.count(SpotCheckin.id))
+
+    # 默认：返回当前用户自己的记录（current_user_id 传 user_id）
+    if is_public is True:
+        # 公开记录：所有人可见
+        stmt = stmt.where(SpotCheckin.is_public == 1)
+        count_stmt = count_stmt.where(SpotCheckin.is_public == 1)
+    elif user_id is not None:
+        stmt = stmt.where(SpotCheckin.user_id == user_id)
+        count_stmt = count_stmt.where(SpotCheckin.user_id == user_id)
+    elif current_user_id is not None:
+        # 返回自己+公开的
+        stmt = stmt.where(
+            (SpotCheckin.user_id == current_user_id) | (SpotCheckin.is_public == 1)
+        )
+        count_stmt = count_stmt.where(
+            (SpotCheckin.user_id == current_user_id) | (SpotCheckin.is_public == 1)
+        )
 
     if spot_id is not None:
         stmt = stmt.where(SpotCheckin.spot_id == spot_id)
         count_stmt = count_stmt.where(SpotCheckin.spot_id == spot_id)
-    if user_id is not None:
-        stmt = stmt.where(SpotCheckin.user_id == user_id)
-        count_stmt = count_stmt.where(SpotCheckin.user_id == user_id)
 
     total_result = await db.execute(count_stmt)
     total = total_result.scalar() or 0

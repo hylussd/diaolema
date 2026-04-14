@@ -9,13 +9,17 @@ Page({
     spotName: '',
     latitude: constants.MAP.DEFAULT_LAT,
     longitude: constants.MAP.DEFAULT_LNG,
-    selectedFish: [],          // 多选鱼种
+    selectedFish: [],
     fishSpecies: constants.FISH_SPECIES,
     weightKg: '',
     notes: '',
     weather: null,
     weatherLoading: true,
     submitting: false,
+    // P2 新增
+    fishingMethod: '',
+    fishingMethods: constants.FISHING_METHODS,
+    isPublic: false,
   },
 
   onLoad(query) {
@@ -64,9 +68,20 @@ Page({
     this.setData({ notes: e.detail.value });
   },
 
+  // P2: 钓法选择
+  onFishingMethodSelect(e) {
+    const method = e.currentTarget.dataset.method;
+    this.setData({ fishingMethod: method });
+  },
+
+  // P2: 公开开关
+  onPublicSwitch(e) {
+    this.setData({ isPublic: e.detail.value });
+  },
+
   // 提交打卡
   async onSubmit() {
-    const { spotId, selectedFish, weightKg, notes, weather, submitting } = this.data;
+    const { spotId, selectedFish, weightKg, notes, weather, submitting, fishingMethod, isPublic } = this.data;
     if (submitting) return;
 
     if (selectedFish.length === 0) {
@@ -81,17 +96,21 @@ Page({
         fish_caught: selectedFish,
         weight_kg: weightKg ? parseFloat(weightKg) : undefined,
         notes: notes || undefined,
+        fishing_method: fishingMethod || undefined,
+        is_public: isPublic,
       };
-      // 天气冗余存储
       if (weather) {
         body.weather_text = weather.condition;
         body.temp = weather.temp;
         body.pressure = weather.pressure;
       }
-      await createCheckin(body);
+      const res = await createCheckin(body);
       wx.showToast({ title: '打卡成功', icon: 'success' });
-      setTimeout(() => wx.navigateBack(), 1500);
-    } catch {
+      // 打卡成功后可跳水文上报
+      setTimeout(function() {
+        wx.navigateBack();
+      }, 1500);
+    } catch (e) {
       wx.showToast({ title: '打卡失败', icon: 'none' });
     } finally {
       this.setData({ submitting: false });

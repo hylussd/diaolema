@@ -659,3 +659,67 @@ DELETE /share/tokens/{token}
 | POST | /share/tokens | P1 | 生成加密Token |
 | GET | /share/tokens/{token} | P1 | 访问分享Token |
 | DELETE | /share/tokens/{token} | P1 | 撤销分享Token |
+
+---
+
+## P2 社区铺垫 — 接口列表
+
+### 水文上报
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| POST | /v1/crowd-reports | 创建水文上报（含防垃圾校验） |
+| GET | /v1/crowd-reports | 查询标点水文数据 |
+
+### 配方管理
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| POST | /v1/recipes | 创建配方 |
+| GET | /v1/recipes/me | 我的所有配方（含公开） |
+| GET | /v1/recipes/public | 社区公开配方列表 |
+| GET | /v1/recipes/{id} | 配方详情（公开任意访问，私有仅创建者） |
+| PUT | /v1/recipes/{id} | 更新配方（仅创建者） |
+| DELETE | /v1/recipes/{id} | 删除配方（仅创建者） |
+
+### 标点评分/点赞
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| POST | /v1/spot-ratings | 评分/点赞 upsert |
+| GET | /v1/spot-ratings | 查询标点评分汇总 |
+
+### 打卡记录扩展
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| POST | /v1/checkins | 创建打卡（扩展 fishing_method、is_public） |
+| GET | /v1/checkins | 查询打卡（支持 is_public=True 过滤） |
+
+### P2 社区铺垫 — 接口列表
+
+#### 水文上报
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| POST | /v1/crowd-reports | 创建水文上报（含防垃圾校验） |
+| GET | /v1/crowd-reports | 查询标点水文数据 |
+
+#### 配方管理
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| POST | /v1/recipes | 创建配方 |
+| GET | /v1/recipes/me | 我的所有配方（含公开） |
+| GET | /v1/recipes/public | 社区公开配方列表 |
+| GET | /v1/recipes/{id} | 配方详情（公开任意访问，私有仅创建者） |
+| PUT | /v1/recipes/{id} | 更新配方（仅创建者） |
+| DELETE | /v1/recipes/{id} | 删除配方（仅创建者） |
+
+#### 标点评分/点赞
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| POST | /v1/spot-ratings | 评分/点赞 upsert |
+| GET | /v1/spot-ratings | 查询标点评分汇总 |
+

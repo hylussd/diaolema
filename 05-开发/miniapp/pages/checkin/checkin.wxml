@@ -44,6 +44,35 @@
     />
   </view>
 
+  <!-- P2: 钓法选择 -->
+  <view class="section">
+    <view class="section-title">钓法</view>
+    <view class="method-grid">
+      <view
+        wx:for="{{fishingMethods}}"
+        wx:key="*this"
+        class="method-chip {{fishingMethod === item ? 'active' : ''}}"
+        bindtap="onFishingMethodSelect"
+        data-method="{{item}}"
+      >{{item}}</view>
+    </view>
+  </view>
+
+  <!-- P2: 是否公开 -->
+  <view class="section">
+    <view class="public-row">
+      <view class="public-label">
+        <text class="section-title" style="margin-bottom:0">公开打卡记录</text>
+        <text class="public-hint">公开后其他用户可在标点详情页看到你的渔获</text>
+      </view>
+      <switch
+        color="#3b82f6"
+        checked="{{isPublic}}"
+        bindchange="onPublicSwitch"
+      />
+    </view>
+  </view>
+
   <!-- 备注 -->
   <view class="section">
     <view class="section-title">备注</view>

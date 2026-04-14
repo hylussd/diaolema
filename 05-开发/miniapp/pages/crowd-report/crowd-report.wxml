@@ -1,0 +1,67 @@
+<!-- pages/crowd-report/crowd-report.wxml -->
+<view class="page">
+  <!-- 标点信息 -->
+  <view class="spot-banner" wx:if="{{spotName}}">
+    <text class="spot-name">{{spotName}}</text>
+  </view>
+
+  <!-- 关联打卡提示 -->
+  <view class="section" wx:if="{{recentCheckin}}">
+    <view class="section-title">关联打卡</view>
+    <view class="checkin-info">
+      <text class="checkin-date">{{recentCheckin.checkinDate}}</text>
+      <text class="checkin-fish" wx:if="{{recentCheckin.fish_caught}}">
+        鱼获：{{recentCheckin.fishCaughtText || recentCheckin.fish_caught}}
+      </text>
+    </view>
+    <text class="hint-text">水文数据将关联到以上打卡记录</text>
+  </view>
+
+  <!-- 水温 -->
+  <view class="section">
+    <view class="section-title">水温（°C）<text class="required">*</text></view>
+    <input
+      class="input-field"
+      type="digit"
+      placeholder="如 22.5"
+      value="{{waterTemp}}"
+      bindinput="onWaterTempInput"
+    />
+    <text class="field-hint">范围：-5 ~ 40°C</text>
+  </view>
+
+  <!-- 溶氧量 -->
+  <view class="section">
+    <view class="section-title">溶氧量（mg/L）<text class="required">*</text></view>
+    <input
+      class="input-field"
+      type="digit"
+      placeholder="如 7.2"
+      value="{{dissolvedOxygen}}"
+      bindinput="onDoInput"
+    />
+    <text class="field-hint">范围：0 ~ 20 mg/L</text>
+  </view>
+
+  <!-- 鱼种 -->
+  <view class="section">
+    <view class="section-title">鱼种 <text class="required">*</text></view>
+    <picker
+      mode="selector"
+      range="{{fishSpecies}}"
+      value="{{fishSpecies.indexOf(selectedFish)}}"
+      bindchange="onFishChange"
+    >
+      <view class="picker-value {{selectedFish ? '' : 'placeholder'}}">
+        {{selectedFish || '请选择鱼种'}}
+      </view>
+    </picker>
+  </view>
+
+  <!-- 提交 -->
+  <view class="submit-area">
+    <button class="btn-submit" bindtap="onSubmit" loading="{{submitting}}">
+      提交上报
+    </button>
+  </view>
+</view>

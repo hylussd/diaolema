@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import get_settings
 from app.routers import users, spots, categories, forbidden_zones, weather, share, checkins, astronomy, recommend
+from app.routers import crowd_reports, recipes, spot_ratings
 
 settings = get_settings()
 
@@ -27,6 +28,10 @@ app.include_router(share.router, prefix="/v1", tags=["分享"])
 app.include_router(checkins.router, prefix="/v1", tags=["打卡"])
 app.include_router(astronomy.router, prefix="/v1", tags=["天文"])
 app.include_router(recommend.router, prefix="/v1", tags=["AI推荐"])
+# P2 社区功能
+app.include_router(crowd_reports.router, prefix="/v1", tags=["crowd-reports"])
+app.include_router(recipes.router, prefix="/v1", tags=["recipes"])
+app.include_router(spot_ratings.router, prefix="/v1", tags=["spot-ratings"])
 
 
 @app.get("/")

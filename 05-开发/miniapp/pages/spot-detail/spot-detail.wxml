@@ -1,4 +1,4 @@
-<!-- 标点详情页 - P1改造：天气关联 + AI推荐理由 + 历史打卡 + 分享Token + 打卡入口 -->
+<!-- 标点详情页 - P1+P2改造 -->
 <view class="page" wx:if="{{!loading && spot}}">
   <!-- 地图预览 -->
   <map
@@ -44,6 +44,35 @@
     </view>
   </view>
 
+  <!-- P2: 评分和点赞 -->
+  <view class="section">
+    <view class="rating-row">
+      <view class="rating-left" bindtap="onOpenRatingModal">
+        <view class="stars">
+          <text
+            wx:for="{{5}}"
+            wx:key="*this"
+            class="star {{index < (ratingSummary && ratingSummary.avg_rating ? ratingSummary.avg_rating : 0) ? 'star-active' : ''}}"
+          >★</text>
+        </view>
+        <text class="rating-text" wx:if="{{ratingSummary}}">
+          {{ratingSummary.avg_rating ? ratingSummary.avg_rating + '分' : '暂无评分'}}
+        </text>
+        <text class="rating-count" wx:if="{{ratingSummary && ratingSummary.rating_count > 0}}">
+          ({{ratingSummary.rating_count}}人评)
+        </text>
+      </view>
+      <view class="like-btn" bindtap="onToggleLike">
+        <text class="like-icon {{ratingSummary && ratingSummary.user_liked ? 'liked' : ''}}">
+          {{ratingSummary && ratingSummary.user_liked ? '❤️' : '🤍'}}
+        </text>
+        <text class="like-count" wx:if="{{ratingSummary && ratingSummary.like_count > 0}}">
+          {{ratingSummary.like_count}}
+        </text>
+      </view>
+    </view>
+  </view>
+
   <!-- 关联天气 -->
   <view class="section" wx:if="{{weather || weatherLoading}}">
     <view class="section-title">关联天气</view>
@@ -60,6 +89,40 @@
     </view>
     <view class="loading-wrap" wx:if="{{weatherLoading}}">
       <text class="text-secondary">加载中...</text>
+    </view>
+  </view>
+
+  <!-- P2: 水文数据 -->
+  <view class="section" wx:if="{{crowdReports.length > 0 || crowdReportsLoading}}">
+    <view class="section-title-row">
+      <text class="section-title">水文数据</text>
+      <view class="add-data-btn" bindtap="goToCrowdReport">+ 上报</view>
+    </view>
+    <view class="loading-wrap" wx:if="{{crowdReportsLoading}}">
+      <text class="text-secondary">加载中...</text>
+    </view>
+    <view class="crowd-list" wx:if="{{!crowdReportsLoading && crowdReports.length > 0}}">
+      <view
+        wx:for="{{crowdReports}}"
+        wx:key="id"
+        class="crowd-item"
+      >
+        <view class="crowd-row">
+          <view class="crowd-field">
+            <text class="crowd-label">水温</text>
+            <text class="crowd-val">{{item.water_temp}}°C</text>
+          </view>
+          <view class="crowd-field">
+            <text class="crowd-label">溶氧</text>
+            <text class="crowd-val">{{item.dissolved_oxygen}} mg/L</text>
+          </view>
+          <view class="crowd-field">
+            <text class="crowd-label">鱼种</text>
+            <text class="crowd-val">{{item.fish_species}}</text>
+          </view>
+        </view>
+        <text class="crowd-time">{{item.report_time}}</text>
+      </view>
     </view>
   </view>
 
@@ -87,7 +150,7 @@
     </view>
   </view>
 
-  <!-- P1: 历史打卡记录 -->
+  <!-- P1+P2: 历史打卡记录 -->
   <view class="section">
     <view class="section-title-row">
       <text class="section-title">打卡记录</text>
@@ -109,6 +172,7 @@
           <text class="checkin-date">{{item.checkinDate}}</text>
           <text class="checkin-fish text-primary">{{item.fishCaughtText}}</text>
           <text class="checkin-weight text-secondary" wx:if="{{item.weight_kg}}">{{item.weight_kg}}kg</text>
+          <text class="checkin-method text-secondary" wx:if="{{item.fishing_method}}">{{item.fishing_method}}</text>
         </view>
         <view class="checkin-meta" wx:if="{{item.weather_text}}">
           <text class="text-sm text-secondary">{{item.weather_text}} {{item.temp ? item.temp + '°' : ''}} {{item.pressure ? item.pressure + 'hPa' : ''}}</text>
@@ -119,11 +183,31 @@
     </view>
   </view>
 
-  <!-- P1: 分享按钮组 -->
+  <!-- 操作按钮组 -->
   <view class="actions">
     <button class="btn btn-outline" bindtap="goToEdit">编辑</button>
     <button class="btn btn-outline" bindtap="onCreateShareToken">生成分享链接</button>
     <button class="btn btn-danger" bindtap="deleteSpot">删除</button>
+  </view>
+</view>
+
+<!-- P2: 评分弹窗 -->
+<view class="rating-modal-overlay" wx:if="{{showRatingModal}}" bindtap="closeRatingModal">
+  <view class="rating-modal" catchtap="noop">
+    <view class="rating-modal-title">给这个标点点个赞</view>
+    <view class="rating-stars">
+      <text
+        wx:for="{{5}}"
+        wx:key="*this"
+        class="modal-star {{index < tempRating ? 'active' : ''}}"
+        bindtap="onSelectStar"
+        data-rating="{{index + 1}}"
+      >★</text>
+    </view>
+    <view class="rating-btns">
+      <button class="btn-cancel" bindtap="closeRatingModal">取消</button>
+      <button class="btn-confirm" bindtap="onConfirmRating">确定</button>
+    </view>
   </view>
 </view>
 
