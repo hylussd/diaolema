@@ -723,3 +723,40 @@ DELETE /share/tokens/{token}
 | POST | /v1/spot-ratings | 评分/点赞 upsert |
 | GET | /v1/spot-ratings | 查询标点评分汇总 |
 
+
+---
+
+## P3 商城接口
+
+### 商品分类
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | /v1/shop/categories | 商品分类列表 |
+
+### 商品
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | /v1/shop/products | 商品列表（支持分类/关键词/精选筛选） |
+| GET | /v1/shop/products/{id} | 商品详情 |
+
+### 购物车
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | /v1/shop/cart | 获取当前用户购物车 |
+| POST | /v1/shop/cart | 添加商品到购物车（upsert） |
+| PUT | /v1/shop/cart/{item_id} | 更新购物车商品数量 |
+| DELETE | /v1/shop/cart/{item_id} | 删除购物车商品 |
+| DELETE | /v1/shop/cart | 清空购物车 |
+
+### 订单
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| POST | /v1/shop/orders | 创建订单（购物车全量结算） |
+| GET | /v1/shop/orders | 订单列表（支持状态筛选） |
+| GET | /v1/shop/orders/{order_id} | 订单详情 |
+| POST | /v1/shop/orders/{order_id}/pay | 模拟支付 |
+| POST | /v1/shop/orders/{order_id}/cancel | 取消订单（退库存） |
