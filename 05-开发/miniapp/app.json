@@ -11,7 +11,14 @@
     "pages/share-view/share-view",
     "pages/recipe/recipe",
     "pages/crowd-report/crowd-report",
-    "pages/checkin/checkin"
+    "pages/checkin/checkin",
+    "pages/shop/index/index",
+    "pages/shop/products/index",
+    "pages/shop/product-detail/index",
+    "pages/shop/cart/index",
+    "pages/shop/checkout/index",
+    "pages/shop/orders/index",
+    "pages/shop/order-detail/index"
   ],
   "window": {
     "navigationBarBackgroundColor": "#1a1a2e",

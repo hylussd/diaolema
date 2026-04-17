@@ -1,13 +1,23 @@
 """应用入口。"""
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from app.config import get_settings
 from app.routers import users, spots, categories, forbidden_zones, weather, share, checkins, astronomy, recommend
-from app.routers import crowd_reports, recipes, spot_ratings
+from app.routers import crowd_reports, recipes, spot_ratings, shop
 
 settings = get_settings()
 
 app = FastAPI(title="钓了吗 API", version="1.0.0")
+
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    """将所有 HTTPException 转换为统一响应格式。"""
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"code": exc.status_code, "data": None, "msg": exc.detail},
+    )
 
 origins = [o.strip() for o in settings.CORS_ORIGINS.split(",")]
 
@@ -32,6 +42,8 @@ app.include_router(recommend.router, prefix="/v1", tags=["AI推荐"])
 app.include_router(crowd_reports.router, prefix="/v1", tags=["crowd-reports"])
 app.include_router(recipes.router, prefix="/v1", tags=["recipes"])
 app.include_router(spot_ratings.router, prefix="/v1", tags=["spot-ratings"])
+# P3 商城功能
+app.include_router(shop.router, prefix="/v1", tags=["商城"])
 
 
 @app.get("/")

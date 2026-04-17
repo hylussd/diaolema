@@ -1,0 +1,63 @@
+<!-- pages/shop/product-detail/index.wxml -->
+<view class="page">
+  <!-- 加载中 -->
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <block wx:elif="{{product}}">
+    <!-- 图片轮播 -->
+    <swiper class="swiper" indicator-dots autoplay circular>
+      <swiper-item wx:for="{{images}}" wx:key="*this">
+        <image class="swiper-img" src="{{item}}" mode="aspectFill" />
+      </swiper-item>
+    </swiper>
+
+    <!-- 商品信息 -->
+    <view class="product-info">
+      <view class="price-row">
+        <text class="price">¥{{formatPrice(product.price)}}</text>
+        <text class="sales">已售 {{product.sales_count || 0}}</text>
+      </view>
+      <text class="product-name">{{product.name}}</text>
+    </view>
+
+    <!-- 规格选择 -->
+    <view class="section" wx:if="{{specsOptions.length > 0}}">
+      <view class="section-title">选择规格</view>
+      <view class="specs-wrap">
+        <view class="spec-item" wx:for="{{specsOptions}}" wx:key="name">
+          <text class="spec-name">{{item.name}}</text>
+          <view class="spec-options">
+            <view
+              class="spec-option {{selectedSpecs[item.name] === opt ? 'active' : ''}}"
+              wx:for="{{item.options}}"
+              wx:for-item="opt"
+              wx:key="*this"
+              bindtap="onSpecTap"
+              data-name="{{item.name}}"
+              data-value="{{opt}}"
+            >{{opt}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 商品详情 -->
+    <view class="section" wx:if="{{product.description}}">
+      <view class="section-title">商品详情</view>
+      <text class="description">{{product.description}}</text>
+    </view>
+
+    <!-- 底部占位 -->
+    <view class="bottom-placeholder"></view>
+
+    <!-- 底部操作栏 -->
+    <view class="bottom-bar">
+      <view class="bottom-bar-inner">
+        <button class="btn-cart" bindtap="onAddToCart" loading="{{submitting}}">加入购物车</button>
+        <button class="btn-buy" bindtap="onBuyNow" loading="{{submitting}}">立即购买</button>
+      </view>
+    </view>
+  </block>
+</view>

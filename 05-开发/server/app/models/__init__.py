@@ -9,6 +9,12 @@ from app.models.share_token import ShareToken
 from app.models.crowd_report import CrowdReport
 from app.models.recipe import Recipe
 from app.models.spot_rating import SpotRating
+from app.models.product_category import ProductCategory
+from app.models.product import Product
+from app.models.cart import Cart
+from app.models.cart_item import CartItem
+from app.models.order import Order
+from app.models.order_item import OrderItem
 
 __all__ = [
     "User",
@@ -21,4 +27,10 @@ __all__ = [
     "CrowdReport",
     "Recipe",
     "SpotRating",
+    "ProductCategory",
+    "Product",
+    "Cart",
+    "CartItem",
+    "Order",
+    "OrderItem",
 ]

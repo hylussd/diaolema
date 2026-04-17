@@ -1,0 +1,76 @@
+<!-- pages/shop/checkout/index.wxml -->
+<view class="page">
+  <!-- 加载中 -->
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <block wx:else>
+    <!-- 收货地址 -->
+    <view class="section">
+      <view class="section-title">收货信息</view>
+      <input
+        class="input-row"
+        placeholder="收货人姓名"
+        value="{{addressName}}"
+        bindinput="onAddressNameInput"
+      />
+      <input
+        class="input-row"
+        type="number"
+        placeholder="联系电话"
+        value="{{addressPhone}}"
+        bindinput="onAddressPhoneInput"
+      />
+      <input
+        class="input-row"
+        placeholder="详细收货地址"
+        value="{{addressDetail}}"
+        bindinput="onAddressDetailInput"
+      />
+    </view>
+
+    <!-- 订单商品摘要 -->
+    <view class="section" wx:if="{{items.length > 0}}">
+      <view class="section-title">订单商品</view>
+      <view class="order-items">
+        <view class="order-item" wx:for="{{items}}" wx:key="id">
+          <image class="item-img" src="{{item.images && item.images[0] || '/assets/icons/me.png'}}" mode="aspectFill" />
+          <view class="item-info">
+            <text class="item-name">{{item.name}}</text>
+            <text class="item-specs">{{item.specs ? JSON.stringify(item.specs) : ''}}</text>
+            <view class="item-bottom">
+              <text class="item-price">¥{{formatPrice(item.price)}}</text>
+              <text class="item-qty">x{{item.quantity}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 备注 -->
+    <view class="section">
+      <view class="section-title">订单备注</view>
+      <input
+        class="input-row"
+        placeholder="选填，如特殊包装要求"
+        value="{{remark}}"
+        bindinput="onRemarkInput"
+      />
+    </view>
+
+    <!-- 底部占位 -->
+    <view class="bottom-placeholder"></view>
+
+    <!-- 底部固定栏 -->
+    <view class="bottom-bar">
+      <view class="bottom-info">
+        <text class="total-label">合计</text>
+        <text class="total-price">¥{{formatPrice(totalAmount)}}</text>
+      </view>
+      <button class="btn-submit" bindtap="onSubmit" loading="{{submitting}}">
+        提交订单
+      </button>
+    </view>
+  </block>
+</view>

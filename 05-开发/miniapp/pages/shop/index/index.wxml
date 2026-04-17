@@ -1,0 +1,79 @@
+<!-- pages/shop/index/index.wxml -->
+<view class="page">
+  <!-- 搜索栏 -->
+  <view class="search-bar" bindtap="onSearchTap">
+    <image class="search-icon" src="/assets/icons/me.png" mode="aspectFit" />
+    <text class="search-placeholder">搜索商品</text>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <block wx:else>
+    <!-- 分类横滑区 -->
+    <view class="section" wx:if="{{categories.length > 0}}">
+      <view class="section-title">商品分类</view>
+      <scroll-view class="cat-scroll" scroll-x enable-flex>
+        <view
+          class="cat-item"
+          wx:for="{{categories}}"
+          wx:key="id"
+          bindtap="onCategoryTap"
+          data-id="{{item.id}}"
+        >
+          <view class="cat-icon">{{item.icon}}</view>
+          <text class="cat-name">{{item.name}}</text>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- 精选推荐区 -->
+    <view class="section" wx:if="{{featuredProducts.length > 0}}">
+      <view class="section-title">精选推荐</view>
+      <view class="product-grid">
+        <view
+          class="product-card"
+          wx:for="{{featuredProducts}}"
+          wx:key="id"
+          bindtap="onProductTap"
+          data-id="{{item.id}}"
+        >
+          <image class="product-img" src="{{item.images && item.images[0] || '/assets/icons/me.png'}}" mode="aspectFill" />
+          <view class="product-info">
+            <text class="product-name">{{item.name}}</text>
+            <view class="product-bottom">
+              <text class="product-price">¥{{formatPrice(item.price)}}</text>
+              <text class="product-tag">精选</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 新品上市区 -->
+    <view class="section" wx:if="{{newProducts.length > 0}}">
+      <view class="section-title">新品上市</view>
+      <scroll-view class="new-scroll" scroll-x>
+        <view
+          class="new-card"
+          wx:for="{{newProducts}}"
+          wx:key="id"
+          bindtap="onProductTap"
+          data-id="{{item.id}}"
+        >
+          <image class="new-img" src="{{item.images && item.images[0] || '/assets/icons/me.png'}}" mode="aspectFill" />
+          <text class="new-name">{{item.name}}</text>
+          <text class="new-price">¥{{formatPrice(item.price)}}</text>
+        </view>
+      </scroll-view>
+    </view>
+  </block>
+
+  <!-- 底部购物车入口 -->
+  <view class="cart-fab" bindtap="onCartTap">
+    <image class="cart-fab-icon" src="/assets/icons/me.png" mode="aspectFit" />
+    <text class="cart-fab-text">购物车</text>
+  </view>
+</view>

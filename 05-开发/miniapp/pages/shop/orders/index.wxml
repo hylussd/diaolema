@@ -1,0 +1,60 @@
+<!-- pages/shop/orders/index.wxml -->
+<view class="page">
+  <!-- Tab 栏 -->
+  <scroll-view class="tab-bar" scroll-x>
+    <view
+      class="tab-item {{currentTab === item.value ? 'active' : ''}}"
+      wx:for="{{tabs}}"
+      wx:key="value"
+      bindtap="onTabTap"
+      data-value="{{item.value}}"
+    >{{item.label}}</view>
+  </scroll-view>
+
+  <!-- 订单列表 -->
+  <view class="order-list" wx:if="{{orders.length > 0}}">
+    <view
+      class="order-card"
+      wx:for="{{orders}}"
+      wx:key="order_id"
+      bindtap="onOrderTap"
+      data-order-id="{{item.order_id}}"
+    >
+      <view class="order-header">
+        <text class="order-no">订单号：{{item.order_no}}</text>
+        <view class="status-tag {{getStatusClass(item.status)}}">{{getStatusLabel(item.status)}}</view>
+      </view>
+      <view class="order-time">{{formatTime(item.created_at)}}</view>
+      <!-- 商品缩略图（最多3张叠在一起） -->
+      <view class="thumb-list" wx:if="{{item.items && item.items.length > 0}}">
+        <image
+          class="thumb-img"
+          wx:for="{{item.items.slice(0, 3)}}"
+          wx:for-item="goods"
+          wx:key="product_id"
+          src="{{goods.images && goods.images[0] || '/assets/icons/me.png'}}"
+          mode="aspectFill"
+        />
+        <text class="thumb-more" wx:if="{{item.items.length > 3}}">+{{item.items.length - 3}}</text>
+      </view>
+      <view class="order-footer">
+        <text class="order-total">¥{{formatPrice(item.total_amount)}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-wrap" wx:elif="{{!loading}}">
+    <text class="empty-text">暂无订单</text>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="load-more" wx:if="{{loading && orders.length > 0}}">
+    <text class="load-more-text">加载中...</text>
+  </view>
+
+  <!-- 没有更多 -->
+  <view class="no-more" wx:if="{{!hasMore && orders.length > 0}}">
+    <text class="no-more-text">— 没有更多了 —</text>
+  </view>
+</view>
