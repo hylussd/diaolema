@@ -9,7 +9,7 @@ const { request } = require('../utils/request');
  */
 function createRecipe(body) {
   return request({
-    url: '/api/recipes',
+    url: '/v1/recipes',
     method: 'POST',
     data: body,
   });
@@ -21,7 +21,7 @@ function createRecipe(body) {
  */
 function getMyRecipes(params) {
   return request({
-    url: '/api/recipes/me',
+    url: '/v1/recipes/me',
     method: 'GET',
     data: params,
   });
@@ -33,7 +33,7 @@ function getMyRecipes(params) {
  */
 function getPublicRecipes(params) {
   return request({
-    url: '/api/recipes/public',
+    url: '/v1/recipes/public',
     method: 'GET',
     data: params,
   });
@@ -45,7 +45,7 @@ function getPublicRecipes(params) {
  */
 function getRecipe(id) {
   return request({
-    url: `/api/recipes/${id}`,
+    url: `/v1/recipes/${id}`,
     method: 'GET',
   });
 }
@@ -57,7 +57,7 @@ function getRecipe(id) {
  */
 function updateRecipe(id, body) {
   return request({
-    url: `/api/recipes/${id}`,
+    url: `/v1/recipes/${id}`,
     method: 'PUT',
     data: body,
   });
@@ -69,7 +69,7 @@ function updateRecipe(id, body) {
  */
 function deleteRecipe(id) {
   return request({
-    url: `/api/recipes/${id}`,
+    url: `/v1/recipes/${id}`,
     method: 'DELETE',
   });
 }

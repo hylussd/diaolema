@@ -6,23 +6,23 @@ const { request } = require('../utils/request');
 // ---------- 基础 CRUD ----------
 
 function getSpots(params) {
-  return request({ url: '/api/spots', method: 'GET', data: params });
+  return request({ url: '/v1/spots', method: 'GET', data: params });
 }
 
 function getSpot(id) {
-  return request({ url: `/api/spots/${id}` });
+  return request({ url: `/v1/spots/${id}` });
 }
 
 function createSpot(data) {
-  return request({ url: '/api/spots', method: 'POST', data });
+  return request({ url: '/v1/spots', method: 'POST', data });
 }
 
 function updateSpot(id, data) {
-  return request({ url: `/api/spots/${id}`, method: 'PUT', data });
+  return request({ url: `/v1/spots/${id}`, method: 'PUT', data });
 }
 
 function deleteSpot(id) {
-  return request({ url: `/api/spots/${id}`, method: 'DELETE' });
+  return request({ url: `/v1/spots/${id}`, method: 'DELETE' });
 }
 
 // ---------- P1: 多参数筛选 ----------
@@ -33,7 +33,7 @@ function deleteSpot(id) {
  *                            temp_min, temp_max, fish_species, category_type, offset, limit }
  */
 function filterSpots(params) {
-  return request({ url: '/api/spots/public/filter', method: 'GET', data: params });
+  return request({ url: '/v1/spots/public/filter', method: 'GET', data: params });
 }
 
 // ---------- P1: AI推荐 ----------
@@ -43,7 +43,7 @@ function filterSpots(params) {
  * @param {object} body - { target_fish, date, time_slot, lat, lng, radius_km }
  */
 function aiRecommend(body) {
-  return request({ url: '/api/spots/ai-recommend', method: 'POST', data: body });
+  return request({ url: '/v1/spots/ai-recommend', method: 'POST', data: body });
 }
 
 module.exports = {

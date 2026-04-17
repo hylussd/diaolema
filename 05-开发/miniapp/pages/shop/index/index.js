@@ -40,7 +40,7 @@ Page({
   async loadFeatured() {
     try {
       const res = await getShopProducts({ is_featured: 1, limit: 10 });
-      this.setData({ featuredProducts: (res.data && res.data.items) || [] });
+      this.setData({ featuredProducts: (res && res.items) || [] });
     } catch {}
   },
 

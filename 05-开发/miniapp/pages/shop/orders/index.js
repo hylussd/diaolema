@@ -38,8 +38,8 @@ Page({
 
     try {
       const res = await getOrders(params);
-      const items = (res.data && res.data.items) || [];
-      const total = (res.data && res.data.total) || 0;
+      const items = (res && res.items) || [];
+      const total = (res && res.total) || 0;
       this.setData({
         orders: reset ? items : this.data.orders.concat(items),
         offset: (reset ? 0 : offset) + items.length,

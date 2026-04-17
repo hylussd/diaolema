@@ -73,7 +73,7 @@
 
   <!-- 底部购物车入口 -->
   <view class="cart-fab" bindtap="onCartTap">
-    <image class="cart-fab-icon" src="/assets/icons/me.png" mode="aspectFit" />
+    <image class="cart-fab-icon" src="/assets/icons/cart.png" mode="aspectFit" />
     <text class="cart-fab-text">购物车</text>
   </view>
 </view>

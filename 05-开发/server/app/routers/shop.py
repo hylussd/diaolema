@@ -31,8 +31,8 @@ router = APIRouter()
 async def get_current_user_id(request: Request) -> int | None:
     """
     尝试从请求中获取当前登录用户ID。
-    优先从 header（x-user-id）获取，否则从 cookie（user_id）获取。
-    未登录返回 None。
+    优先级：header（x-user-id）> cookie > query > body（POST/PUT 请求体）
+    本地 mock 时从 query 或 body 获取 user_id=1。
     """
     user_id = request.headers.get("x-user-id")
     if user_id:
@@ -45,6 +45,21 @@ async def get_current_user_id(request: Request) -> int | None:
         try:
             return int(cookie_val)
         except ValueError:
+            pass
+    # query 参数 fallback（GET 请求常用）
+    query_uid = request.query_params.get("user_id")
+    if query_uid:
+        try:
+            return int(query_uid)
+        except ValueError:
+            pass
+    # body fallback（POST/PUT 请求，body 是 dict 时）
+    if request.method in ("POST", "PUT", "PATCH"):
+        try:
+            body = await request.json()
+            if isinstance(body, dict) and "user_id" in body:
+                return int(body["user_id"])
+        except Exception:
             pass
     return None
 
@@ -151,12 +166,10 @@ async def get_product(
 async def get_cart(
     request: Request,
     db: Annotated[AsyncSession, Depends(get_db)],
+    user_id: int = Query(1),
 ):
     """获取当前用户购物车。"""
-    user_id = await get_current_user_id(request)
-    uid = require_login(user_id)
-
-    cart = await shop_service.get_cart_with_items(db, uid)
+    cart = await shop_service.get_cart_with_items(db, user_id)
     return {
         "code": 0,
         "data": cart.model_dump(),
@@ -169,11 +182,10 @@ async def add_to_cart(
     request: Request,
     body: CartAddRequest,
     db: Annotated[AsyncSession, Depends(get_db)],
+    user_id: int = Query(1),
 ):
     """添加商品到购物车。"""
-    user_id = await get_current_user_id(request)
-    uid = require_login(user_id)
-
+    uid = body.user_id if (body.user_id is not None) else user_id
     try:
         result = await shop_service.create_or_update_cart_item(
             db, uid, body.product_id, body.quantity, body.specs
@@ -193,13 +205,11 @@ async def update_cart_item(
     request: Request,
     body: CartUpdateRequest,
     db: Annotated[AsyncSession, Depends(get_db)],
+    user_id: int = Query(1),
 ):
     """更新购物车商品数量（quantity=0 等同删除）。"""
-    user_id = await get_current_user_id(request)
-    uid = require_login(user_id)
-
     try:
-        await shop_service.update_cart_item(db, uid, item_id, body.quantity)
+        await shop_service.update_cart_item(db, user_id, item_id, body.quantity)
     except HTTPException:
         raise
     return {"code": 0, "data": None, "msg": "更新成功"}
@@ -208,15 +218,12 @@ async def update_cart_item(
 @router.delete("/shop/cart/{item_id}", response_model=dict)
 async def delete_cart_item(
     item_id: int,
-    request: Request,
     db: Annotated[AsyncSession, Depends(get_db)],
+    user_id: int = Query(1),
 ):
     """删除购物车商品。"""
-    user_id = await get_current_user_id(request)
-    uid = require_login(user_id)
-
     try:
-        await shop_service.delete_cart_item(db, uid, item_id)
+        await shop_service.delete_cart_item(db, user_id, item_id)
     except HTTPException:
         raise
     return {"code": 0, "data": None, "msg": "已删除"}
@@ -224,13 +231,11 @@ async def delete_cart_item(
 
 @router.delete("/shop/cart", response_model=dict)
 async def clear_cart(
-    request: Request, db: Annotated[AsyncSession, Depends(get_db)]
+    db: Annotated[AsyncSession, Depends(get_db)],
+    user_id: int = Query(1),
 ):
     """清空购物车。"""
-    user_id = await get_current_user_id(request)
-    uid = require_login(user_id)
-
-    await shop_service.clear_cart(db, uid)
+    await shop_service.clear_cart(db, user_id)
     return {"code": 0, "data": None, "msg": "购物车已清空"}
 
 
@@ -241,14 +246,12 @@ async def clear_cart(
 
 @router.post("/shop/orders", response_model=dict)
 async def create_order(
-    request: Request,
     body: OrderCreateRequest,
     db: Annotated[AsyncSession, Depends(get_db)],
+    user_id: int = Query(1),
 ):
     """创建订单（购物车全量结算）。"""
-    user_id = await get_current_user_id(request)
-    uid = require_login(user_id)
-
+    uid = body.user_id if (body.user_id is not None) else user_id
     try:
         order = await shop_service.create_order_from_cart(
             db,
@@ -270,17 +273,14 @@ async def create_order(
 
 @router.get("/shop/orders", response_model=dict)
 async def list_orders(
-    request: Request,
     db: Annotated[AsyncSession, Depends(get_db)],
     status: str | None = Query(None),
+    user_id: int = Query(1),
     offset: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
 ):
     """订单列表。"""
-    user_id = await get_current_user_id(request)
-    uid = require_login(user_id)
-
-    result = await shop_service.get_order_list(db, uid, status, offset, limit)
+    result = await shop_service.get_order_list(db, user_id, status, offset, limit)
     return {
         "code": 0,
         "data": result,
@@ -291,15 +291,12 @@ async def list_orders(
 @router.get("/shop/orders/{order_id}", response_model=dict)
 async def get_order(
     order_id: int,
-    request: Request,
     db: Annotated[AsyncSession, Depends(get_db)],
+    user_id: int = Query(1),
 ):
     """订单详情。"""
-    user_id = await get_current_user_id(request)
-    uid = require_login(user_id)
-
     try:
-        order = await shop_service.get_order_detail(db, uid, order_id)
+        order = await shop_service.get_order_detail(db, user_id, order_id)
     except HTTPException:
         raise
     return {
@@ -312,16 +309,13 @@ async def get_order(
 @router.post("/shop/orders/{order_id}/pay", response_model=dict)
 async def mock_pay_order(
     order_id: int,
-    request: Request,
     db: Annotated[AsyncSession, Depends(get_db)],
+    user_id: int = Query(1),
     pay_status: str = Query("paid"),
 ):
     """模拟支付。"""
-    user_id = await get_current_user_id(request)
-    uid = require_login(user_id)
-
     try:
-        result = await shop_service.mock_pay(db, uid, order_id, pay_status)
+        result = await shop_service.mock_pay(db, user_id, order_id, pay_status)
     except HTTPException:
         raise
     return {
@@ -334,15 +328,12 @@ async def mock_pay_order(
 @router.post("/shop/orders/{order_id}/cancel", response_model=dict)
 async def cancel_order(
     order_id: int,
-    request: Request,
     db: Annotated[AsyncSession, Depends(get_db)],
+    user_id: int = Query(1),
 ):
     """取消订单（仅 pending 状态）。"""
-    user_id = await get_current_user_id(request)
-    uid = require_login(user_id)
-
     try:
-        await shop_service.cancel_order(db, uid, order_id)
+        await shop_service.cancel_order(db, user_id, order_id)
     except HTTPException:
         raise
     return {"code": 0, "data": None, "msg": "订单已取消"}

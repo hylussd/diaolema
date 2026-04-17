@@ -13,7 +13,7 @@ function generateQrcode(path, query = {}) {
     .map(([k, v]) => `${k}=${v}`)
     .join('&');
   return request({
-    url: '/api/share/qrcode',
+    url: '/v1/share/qrcode',
     method: 'POST',
     data: { path, scene },
   });
@@ -24,7 +24,7 @@ function generateQrcode(path, query = {}) {
  */
 function getShareLink(path, query = {}) {
   return request({
-    url: '/api/share/link',
+    url: '/v1/share/link',
     method: 'GET',
     data: { path, ...query },
   });
@@ -39,7 +39,7 @@ function getShareLink(path, query = {}) {
  */
 function createToken(spotId, validDays = 7) {
   return request({
-    url: '/api/share/tokens',
+    url: '/v1/share/tokens',
     method: 'POST',
     data: { spot_id: spotId, valid_days: validDays },
   });
@@ -51,7 +51,7 @@ function createToken(spotId, validDays = 7) {
  */
 function getToken(token) {
   return request({
-    url: `/api/share/tokens/${token}`,
+    url: `/v1/share/tokens/${token}`,
     method: 'GET',
   });
 }
@@ -62,7 +62,7 @@ function getToken(token) {
  */
 function revokeToken(token) {
   return request({
-    url: `/api/share/tokens/${token}`,
+    url: `/v1/share/tokens/${token}`,
     method: 'DELETE',
   });
 }

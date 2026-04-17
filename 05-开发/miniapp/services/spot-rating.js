@@ -9,7 +9,7 @@ const { request } = require('../utils/request');
  */
 function upsertSpotRating(body) {
   return request({
-    url: '/api/spot-ratings',
+    url: '/v1/spot-ratings',
     method: 'POST',
     data: body,
   });
@@ -24,7 +24,7 @@ function getSpotRatingSummary(spotId, userId) {
   const params = { spot_id: spotId };
   if (userId) params.user_id = userId;
   return request({
-    url: '/api/spot-ratings',
+    url: '/v1/spot-ratings',
     method: 'GET',
     data: params,
   });

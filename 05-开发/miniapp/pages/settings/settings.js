@@ -37,6 +37,11 @@ Page({
     });
   },
 
+  // 跳转商城
+  goShop() {
+    wx.navigateTo({ url: '/pages/shop/index/index' });
+  },
+
   // 关于页面
   showAbout() {
     wx.showModal({

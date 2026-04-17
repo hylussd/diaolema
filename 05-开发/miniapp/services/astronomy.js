@@ -11,7 +11,7 @@ const { request } = require('../utils/request');
  */
 function getAstronomy(lat, lng, date) {
   return request({
-    url: '/api/astronomy',
+    url: '/v1/astronomy',
     method: 'GET',
     data: { lat, lng, date },
   });

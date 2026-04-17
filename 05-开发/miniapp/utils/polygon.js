@@ -5,20 +5,23 @@
 function isPointInPolygon(point, polygon) {
   if (!polygon || polygon.length < 3) return false;
 
-  let inside = false;
-  const n = polygon.length;
+  var inside = false;
+  var n = polygon.length;
 
-  for (let i = 0, j = n - 1; i < n; j = i++) {
-    const xi = polygon[i].longitude;
-    const yi = polygon[i].latitude;
-    const xj = polygon[j].longitude;
-    const yj = polygon[j].latitude;
+  for (var i = 0, j = n - 1; i < n; j = i++) {
+    var xi = polygon[i].longitude;
+    var yi = polygon[i].latitude;
+    var xj = polygon[j].longitude;
+    var yj = polygon[j].latitude;
 
-    if (
-      yi > point.latitude !== yj > point.latitude &&
-      point.longitude < ((xj - xi) * (point.latitude - yi)) / (yj - yi) + xi)
-    ) {
-      inside = !inside;
+    // 射线法核心判断：yi 和 yj 在 point.latitude 的两侧
+    var cond1 = (yi > point.latitude);
+    var cond2 = (yj > point.latitude);
+    if (cond1 !== cond2) {
+      var intersectX = ((xj - xi) * (point.latitude - yi)) / (yj - yi) + xi;
+      if (point.longitude < intersectX) {
+        inside = !inside;
+      }
     }
   }
   return inside;
@@ -28,20 +31,20 @@ function isPointInPolygon(point, polygon) {
  * 判断坐标是否在任意一个禁钓区内
  * @param {object} point - {latitude, longitude}
  * @param {array} zones - 禁钓区数组，每个元素是 {coordinates: [[lng, lat], ...]}
- * @returns {boolean}
  */
 function isInForbiddenZone(point, zones) {
-  for (const zone of zones) {
-    if (!zone.coordinates || zone.coordinates.length < 3) continue;
-    const polygon = zone.coordinates.map(coord => ({
-      longitude: coord[0],
-      latitude: coord[1],
-    }));
-    if (isPointInPolygon(point, polygon)) {
-      return zone;
+  if (!zones || !point) return false;
+  for (var i = 0; i < zones.length; i++) {
+    var zone = zones[i];
+    if (!zone || !zone.coordinates || zone.coordinates.length < 3) continue;
+    if (isPointInPolygon(point, zone.coordinates)) {
+      return true;
     }
   }
-  return null;
+  return false;
 }
 
-module.exports = { isPointInPolygon, isInForbiddenZone };
+module.exports = {
+  isPointInPolygon: isPointInPolygon,
+  isInForbiddenZone: isInForbiddenZone,
+};

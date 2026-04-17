@@ -106,6 +106,7 @@ class CartAddRequest(BaseModel):
     product_id: int = Field(..., gt=0)
     quantity: int = Field(..., gt=0)
     specs: dict | None = None
+    user_id: int | None = Field(default=None)  # 前端放 body 里
 
 
 class CartUpdateRequest(BaseModel):
@@ -167,6 +168,7 @@ class OrderCreateRequest(BaseModel):
     address_detail: str = Field(..., min_length=1)
     remark: str | None = None
     pay_status: str = Field(default="unpaid")  # 传 paid 时模拟支付成功
+    user_id: int | None = Field(default=None)  # 前端放 body 里
 
 
 class OrderCreateResponse(BaseModel):

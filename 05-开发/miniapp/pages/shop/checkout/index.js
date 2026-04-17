@@ -23,7 +23,7 @@ Page({
     try {
       if (this.fromCart) {
         const res = await getCart();
-        const cart = res.data || {};
+        const cart = res || {};
         const items = cart.items || [];
         const totalAmount = cart.total_amount || 0;
         this.setData({ items, totalAmount, loading: false });

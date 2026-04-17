@@ -22,7 +22,7 @@ Page({
     this.setData({ loading: true });
     try {
       const res = await getShopProductDetail(id);
-      const product = res.data || {};
+      const product = res || {};
       const images = product.images || [];
       // 初始化规格选中项（默认选每个规格第一个选项）
       const specs = product.specs || [];

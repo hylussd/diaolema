@@ -19,7 +19,7 @@ Page({
     this.setData({ loading: true });
     try {
       const res = await getCart();
-      const cart = res.data || {};
+      const cart = res || {};
       const items = cart.items || [];
       // 默认全选
       const selectedIds = items.map((i) => i.id);

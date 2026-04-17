@@ -9,7 +9,7 @@ const { request } = require('../utils/request');
  */
 function createCrowdReport(body) {
   return request({
-    url: '/api/crowd-reports',
+    url: '/v1/crowd-reports',
     method: 'POST',
     data: body,
   });
@@ -21,7 +21,7 @@ function createCrowdReport(body) {
  */
 function getCrowdReports(params) {
   return request({
-    url: '/api/crowd-reports',
+    url: '/v1/crowd-reports',
     method: 'GET',
     data: params,
   });

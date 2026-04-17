@@ -9,7 +9,7 @@ const { request } = require('../utils/request');
  */
 function createCheckin(body) {
   return request({
-    url: '/api/checkins',
+    url: '/v1/checkins',
     method: 'POST',
     data: body,
   });
@@ -21,7 +21,7 @@ function createCheckin(body) {
  */
 function getCheckins(params) {
   return request({
-    url: '/api/checkins',
+    url: '/v1/checkins',
     method: 'GET',
     data: params,
   });
@@ -33,7 +33,7 @@ function getCheckins(params) {
  */
 function deleteCheckin(id) {
   return request({
-    url: `/api/checkins/${id}`,
+    url: `/v1/checkins/${id}`,
     method: 'DELETE',
   });
 }

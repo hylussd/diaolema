@@ -18,7 +18,7 @@ Page({
     this.setData({ loading: true });
     try {
       const res = await getOrderDetail(orderId);
-      this.setData({ order: res.data || {}, loading: false });
+      this.setData({ order: res || {}, loading: false });
     } catch {
       this.setData({ loading: false });
       wx.showToast({ title: '加载失败', icon: 'none' });

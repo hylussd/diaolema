@@ -1,8 +1,7 @@
 /**
  * wx.request Promise 封装
+ * 自动拆包：code===0 时 resolve(data)，否则 reject(res)
  */
-const constants = require('./constants');
-
 function request(options) {
   return new Promise((resolve, reject) => {
     const app = getApp();
@@ -17,7 +16,17 @@ function request(options) {
       },
       success: (res) => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
-          resolve(res.data);
+          const body = res.data;
+          // 如果是 {code, data, msg} 包装格式，自动拆包
+          if (body && body.code === 0) {
+            resolve(body.data);
+          } else if (body && body.code !== undefined) {
+            // 有 code 但非 0，当作错误处理
+            reject(body);
+          } else {
+            // 非包装格式，直接返回
+            resolve(body);
+          }
         } else if (res.statusCode === 401) {
           wx.showToast({ title: '请先登录', icon: 'none' });
           reject(res);
