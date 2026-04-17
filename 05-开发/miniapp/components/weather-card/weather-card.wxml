@@ -3,7 +3,7 @@
   <view class="weather-main">
     <view class="temp-wrap">
       <text class="temp">{{weather.temp}}°</text>
-      <text class="condition">{{weather.condition}}</text>
+      <text class="condition">{{weather.weather_text || '未知'}}</text>
     </view>
     <view class="weather-details">
       <view class="detail-item">
@@ -12,7 +12,7 @@
       </view>
       <view class="detail-item">
         <text class="label">风力</text>
-        <text class="value">{{weather.windSpeed}} {{weather.windScale}}级</text>
+        <text class="value">{{weather.wind_speed}} m/s</text>
       </view>
       <view class="detail-item">
         <text class="label">湿度</text>

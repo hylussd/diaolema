@@ -100,7 +100,7 @@ Page({
         is_public: isPublic,
       };
       if (weather) {
-        body.weather_text = weather.condition;
+        body.weather_text = weather.weather_text;
         body.temp = weather.temp;
         body.pressure = weather.pressure;
       }

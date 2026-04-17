@@ -296,8 +296,8 @@ Page({
     wx.showLoading({ title: '生成中...' });
     try {
       const { spot } = this.data;
-      const res = await generateQrcode('/pages/spot-detail/spot-detail', { id: spot.id });
-      this.setData({ shareQrcode: res.image_url });
+      const res = await generateQrcode(spot.id, spot.name || '钓了吗');
+      this.setData({ shareQrcode: res.qr_data_url });
       wx.hideLoading();
     } catch {
       wx.hideLoading();

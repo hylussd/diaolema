@@ -5,28 +5,27 @@ const { request } = require('../utils/request');
 
 /**
  * 生成分享小程序码
- * @param {string} path - 小程序页面路径
- * @param {object} query - 页面参数
+ * @param {number} spotId - 标点ID
+ * @param {string} title - 标题
  */
-function generateQrcode(path, query = {}) {
-  const scene = Object.entries(query)
-    .map(([k, v]) => `${k}=${v}`)
-    .join('&');
+function generateQrcode(spotId, title = '钓了吗') {
   return request({
-    url: '/v1/share/qrcode',
+    url: '/v1/share/generate-qr',
     method: 'POST',
-    data: { path, scene },
+    data: { spot_id: spotId, title },
   });
 }
 
 /**
  * 获取分享链接
+ * @param {number} spotId - 标点ID
+ * @param {string} title - 标题
  */
-function getShareLink(path, query = {}) {
+function getShareLink(spotId, title = '钓了吗') {
   return request({
-    url: '/v1/share/link',
+    url: `/v1/share/spots/${spotId}`,
     method: 'GET',
-    data: { path, ...query },
+    data: { title },
   });
 }
 

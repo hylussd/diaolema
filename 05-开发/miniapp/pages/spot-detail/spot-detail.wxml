@@ -79,11 +79,11 @@
     <view class="weather-summary" wx:if="{{weather}}">
       <view class="w-row">
         <text class="w-temp">{{weather.temp}}°</text>
-        <text class="w-condition">{{weather.condition}}</text>
+        <text class="w-condition">{{weather.weather_text}}</text>
       </view>
       <view class="w-details">
         <text>气压 {{weather.pressure}}hPa</text>
-        <text>风力 {{weather.windScale}}级</text>
+        <text>风力 {{weather.wind_speed}}级</text>
         <text>湿度 {{weather.humidity}}%</text>
       </view>
     </view>

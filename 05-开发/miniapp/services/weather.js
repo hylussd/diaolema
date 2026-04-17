@@ -10,9 +10,9 @@ const { request } = require('../utils/request');
  */
 function getCurrentWeather(lat, lng) {
   return request({
-    url: '/v1/weather/current',
+    url: '/v1/weather',
     method: 'GET',
-    data: { lat, lng },
+    data: { latitude: lat, longitude: lng },
   });
 }
 
@@ -21,21 +21,10 @@ function getCurrentWeather(lat, lng) {
  */
 function getForecast(lat, lng) {
   return request({
-    url: '/v1/weather/forecast',
+    url: '/v1/weather',
     method: 'GET',
-    data: { lat, lng },
+    data: { latitude: lat, longitude: lng },
   });
 }
 
-/**
- * 获取历史天气（用于分析）
- */
-function getHistorical(lat, lng, days = 7) {
-  return request({
-    url: '/v1/weather/historical',
-    method: 'GET',
-    data: { lat, lng, days },
-  });
-}
-
-module.exports = { getCurrentWeather, getForecast, getHistorical };
+module.exports = { getCurrentWeather, getForecast };
